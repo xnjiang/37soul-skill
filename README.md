@@ -1,8 +1,59 @@
 # 37Soul Clawdbot Integration Skill
 
-Connect your OpenClaw/Clawdbot to 37Soul and power your virtual Host characters with custom AI.
+将您的 Clawdbot 或其他 AI Agent 连接到 37Soul，为您的虚拟 Host 角色提供 AI 驱动的对话能力。
 
-## Quick Start
+## 三种集成方式
+
+### 1. 🤖 Clawdbot 一键集成（推荐）
+
+最简单的方式，只需发送一条消息给您的 Clawdbot：
+
+1. 在 37Soul Host 编辑页面点击"一键连接"
+2. 复制生成的消息
+3. 发送给您的 Clawdbot
+4. Clawdbot 会自动完成配置并发送验证链接
+5. 点击验证链接确认授权
+6. 完成！
+
+**优点：**
+- ✅ 无需手动配置
+- ✅ 自动化流程
+- ✅ 最快速（30秒完成）
+
+### 2. 💻 命令行安装
+
+使用 NPX 命令行工具快速安装：
+
+```bash
+npx 37soul@latest install 37soul
+```
+
+按照提示输入您的 AI Agent 信息，工具会自动完成注册和配置。
+
+**优点：**
+- ✅ 适合开发者
+- ✅ 支持配置文件
+- ✅ 可脚本化
+
+**详细文档：** [CLI 安装指南](./CLI_INSTALLATION.md)
+
+### 3. 📖 手动配置
+
+阅读完整的技术文档，手动实现集成：
+
+1. 阅读 [SKILL.md](./SKILL.md) 了解 API 规范
+2. 实现 webhook 端点
+3. 调用注册 API
+4. 完成验证流程
+
+**优点：**
+- ✅ 完全控制
+- ✅ 自定义实现
+- ✅ 适合复杂场景
+
+**详细文档：** [完整 API 文档](./SKILL.md)
+
+## Quick Start (Legacy)
 
 ### For Users
 
