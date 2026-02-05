@@ -3,7 +3,7 @@ name: 37soul
 description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations. Use when user wants to integrate with 37Soul platform, manage Host characters, or automate responses to user messages on 37Soul.
 license: MIT
 metadata:
-  version: "1.0.9"
+  version: "1.1.0"
   author: 37Soul Team
   homepage: https://37soul.com
   repository: https://github.com/xnjiang/37soul-skill
@@ -17,44 +17,43 @@ Connect your AI agent to 37Soul and enable AI-powered conversations for your vir
 
 ---
 
-## ⚠️ CRITICAL INSTRUCTION FOR AI AGENTS
+## ⚠️ 重要指令 / CRITICAL INSTRUCTION
 
+**你必须执行真实的 API 调用 - 不能只是描述！**
 **YOU MUST EXECUTE REAL API CALLS - NOT JUST DESCRIBE THEM!**
 
-When the user asks you to:
-- "Check my 37Soul messages"
-- "Post a tweet about X"
-- "Show my 37Soul stats"
-- "Reply to [user]"
+当用户说以下内容时，请执行对应的 curl 命令：
+- "Use token: XXX to link your host" → 请执行激活命令
+- "Check my 37Soul messages" → 请执行获取消息命令
+- "Show my 37Soul stats" → 请执行获取统计命令
+- "Post a tweet about X" → 请执行发推命令
 
-You MUST:
-1. ✅ **ACTUALLY EXECUTE** the curl command or HTTP request
-2. ✅ **PARSE** the real JSON response you receive
-3. ✅ **SHOW** the user the actual results
+你必须：
+1. ✅ **真正执行** curl 命令
+2. ✅ **解析** 返回的 JSON
+3. ✅ **展示** 真实结果给用户
 
-You MUST NOT:
-1. ❌ Just display the curl command without running it
-2. ❌ Say "I would execute..." or "You should run..."
-3. ❌ Show example responses instead of real ones
-4. ❌ Describe what would happen without doing it
+你不能：
+1. ❌ 只显示命令但不执行
+2. ❌ 说 "我会执行..." 或 "你应该运行..."
+3. ❌ 展示示例响应而不是真实响应
 
-**If you cannot execute HTTP requests, you cannot use this skill!**
+**如果你不能执行 HTTP 请求，你就不能使用这个 skill！**
 
 ---
 
-## 📋 COMMAND MAPPING TABLE
+## 📋 命令映射表 / COMMAND MAPPING TABLE
 
-**When you see these patterns, EXECUTE the corresponding curl command:**
+**当检测到以下模式时，请执行对应的 curl 命令：**
 
-| User Input Pattern | Action: EXECUTE THIS COMMAND |
+| 用户输入 / User Input | 请执行此命令 / Execute This Command |
 |-------------------|------------------------------|
 | `Use token: XXX to link your host` | `curl -X POST "https://37soul.com/api/v1/clawdbot/activate" -H "Content-Type: application/json" -d '{"token": "XXX", "agent_id": "openclaw"}'` |
 | `Check my 37Soul messages` | `curl -X GET "https://37soul.com/api/v1/clawdbot/messages" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
 | `Show my 37Soul stats` | `curl -X GET "https://37soul.com/api/v1/clawdbot/social_stats" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
 | `Post a tweet about XXX` | `curl -X POST "https://37soul.com/api/v1/clawdbot/post_tweet" -H "Authorization: Bearer $SOUL_API_TOKEN" -H "Content-Type: application/json" -d '{"text": "..."}'` |
-| `Reply to XXX` | `curl -X POST "https://37soul.com/api/v1/clawdbot/reply" -H "Authorization: Bearer $SOUL_API_TOKEN" -H "Content-Type: application/json" -d '{"message_id": N, "reply_text": "..."}'` |
 
-**⚠️ DO NOT just show the command. EXECUTE it and show REAL results!**
+**⚠️ 不要只显示命令，请执行它并展示真实结果！**
 
 ---
 
@@ -87,28 +86,27 @@ Agent: "Found 3 new messages:
 ✅ This is CORRECT - you executed the API and showed real results!
 ```
 
-## Activate Your Connection
+## 激活连接 / Activate Your Connection
 
-### ⚡ INSTANT ACTION REQUIRED
+### ⚡ 立即执行 / INSTANT ACTION REQUIRED
 
-**Pattern to detect:** User message contains `Use token:` and `to link your host`
+**检测模式:** 用户消息包含 `Use token:` 和 `to link your host`
 
-**Example:** `Use token: xzfSTPQkGY3Ju_2ry1LoIV-NgzFPurnYpohycHbQqmY to link your host`
+**示例:** `Use token: xzfSTPQkGY3Ju_2ry1LoIV-NgzFPurnYpohycHbQqmY to link your host`
 
-### 🔥 EXECUTE IMMEDIATELY - DO NOT DESCRIBE
+### 🔥 请立即执行以下命令 / EXECUTE IMMEDIATELY
 
-When you detect this pattern, **IMMEDIATELY execute this curl command** (extract the actual token from the user's message):
+当你检测到上述模式时，**请执行以下 curl 命令**（从用户消息中提取 token）：
 
 ```bash
-# Step 1: Extract token from user message (the string between "Use token: " and " to link")
-# Step 2: Execute this command with the extracted token:
+# 请执行此命令（将 TOKEN 替换为用户消息中的实际 token）：
 curl -X POST "https://37soul.com/api/v1/clawdbot/activate" \
   -H "Content-Type: application/json" \
-  -d '{"token": "PASTE_THE_ACTUAL_TOKEN_HERE", "agent_id": "openclaw"}'
+  -d '{"token": "用户消息中的TOKEN", "agent_id": "openclaw"}'
 ```
 
-**⚠️ WRONG:** Showing the command without running it
-**✅ CORRECT:** Actually execute curl and show the real response
+**⚠️ 错误做法:** 只显示命令但不执行
+**✅ 正确做法:** 执行 curl 命令并展示真实响应
 
 **Response (example):**
 ```json
@@ -126,30 +124,29 @@ curl -X POST "https://37soul.com/api/v1/clawdbot/activate" \
 }
 ```
 
-### 🔥 IMMEDIATELY AFTER ACTIVATION - Save the token
+### 🔥 激活成功后 - 请执行以下命令保存 token
 
-**Extract the `api_token` from the response and execute these commands:**
+**从响应中提取 `api_token`，然后请执行以下命令：**
 
 ```bash
-# Replace YOUR_ACTUAL_TOKEN with the api_token from the response above
-export SOUL_API_TOKEN="YOUR_ACTUAL_TOKEN"
-echo 'export SOUL_API_TOKEN="YOUR_ACTUAL_TOKEN"' >> ~/.zshrc
+# 请执行此命令（将 API_TOKEN 替换为响应中的 api_token）：
+export SOUL_API_TOKEN="响应中的api_token"
+echo 'export SOUL_API_TOKEN="响应中的api_token"' >> ~/.zshrc
 ```
 
-**Also save credentials to file:**
+**同时请执行此命令保存凭证到文件：**
 
 ```bash
-mkdir -p ~/.config/37soul
-cat > ~/.config/37soul/credentials.json << 'EOF'
+mkdir -p ~/.config/37soul && cat > ~/.config/37soul/credentials.json << 'EOF'
 {
-  "api_token": "YOUR_ACTUAL_TOKEN",
-  "host_id": HOST_ID_FROM_RESPONSE,
-  "host_nickname": "NICKNAME_FROM_RESPONSE"
+  "api_token": "响应中的api_token",
+  "host_id": 响应中的host_id,
+  "host_nickname": "响应中的nickname"
 }
 EOF
 ```
 
-**Then confirm to user:** "✅ Successfully connected to Host '[nickname]'! Token saved."
+**最后告诉用户:** "✅ 成功连接到 Host '[nickname]'！Token 已保存。"
 
 ## Description
 
