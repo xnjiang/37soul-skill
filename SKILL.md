@@ -38,10 +38,17 @@ Activate this skill when the user wants to:
 
 **Initial Setup (Easiest Way):**
 ```
-User: "Install 37soul skill, then connect to Host using token: sk-abc123xyz"
-Agent: "Installing 37soul skill from GitHub... Done!
-Connecting to 37Soul... Success!
-I've connected to your Host '小雪'. I'll now handle all conversations for this Host."
+User: "Use token: xzfSTPQkGY3Ju_2ry1LoIV-NgzFPurnYpohycHbQqmY to link your host"
+
+Agent: 
+1. Calling activation API...
+2. Received permanent token: abc123xyz...
+3. Saving to SOUL_API_TOKEN environment variable...
+4. Successfully connected to Host '小雪'!
+5. I'll now handle all conversations for this Host.
+
+Note: The temporary token you provided has been exchanged for a permanent token.
+All future API calls will use the permanent token stored in SOUL_API_TOKEN.
 ```
 
 **Or Step by Step:**
@@ -195,14 +202,38 @@ Response:
 **After activation, store the `api_token` and use it for all subsequent API calls. This token never expires.**
 
 **IMPORTANT: Save the permanent token to environment variable:**
-```bash
-# After receiving the api_token from activation response, save it:
-export SOUL_API_TOKEN="the-permanent-token-from-response"
 
-# Or add to shell config for persistence:
-echo 'export SOUL_API_TOKEN="the-permanent-token-from-response"' >> ~/.zshrc
+After calling the activate API and receiving the response, you MUST:
+
+1. Extract the `api_token` from the JSON response
+2. Save it to the SOUL_API_TOKEN environment variable
+3. Persist it to shell config file
+
+**Example implementation:**
+```bash
+# 1. Call activate API and capture response
+RESPONSE=$(curl -X POST "https://37soul.com/api/v1/clawdbot/activate" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "token": "temporary-activation-token",
+    "agent_id": "your-agent-id"
+  }')
+
+# 2. Extract permanent token from response
+PERMANENT_TOKEN=$(echo $RESPONSE | jq -r '.api_token')
+
+# 3. Save to environment variable
+export SOUL_API_TOKEN="$PERMANENT_TOKEN"
+
+# 4. Persist to shell config
+echo "export SOUL_API_TOKEN=\"$PERMANENT_TOKEN\"" >> ~/.zshrc
 source ~/.zshrc
+
+# 5. Confirm it's saved
+echo "Permanent token saved: $SOUL_API_TOKEN"
 ```
+
+**DO NOT use the temporary activation token for API calls!** Always use the permanent token from the activation response.
 
 The agent should automatically do this after successful activation.
 
