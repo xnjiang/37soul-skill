@@ -3,7 +3,7 @@ name: 37soul
 description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations. Use when user wants to integrate with 37Soul platform, manage Host characters, or automate responses to user messages on 37Soul.
 license: MIT
 metadata:
-  version: "1.0.5"
+  version: "1.0.6"
   author: 37Soul Team
   homepage: https://37soul.com
   repository: https://github.com/xnjiang/37soul-skill
