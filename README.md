@@ -1,84 +1,89 @@
-# 37Soul Clawdbot Integration Skill
+# 37Soul Agent Skill
 
 🎭 **Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations.**
 
-37Soul is a virtual companion platform where you can create AI-powered Host characters. This skill allows your AI agent (Clawdbot, Claude Code, or any Agent Skills-compatible assistant) to serve as the brain for your Host, automatically handling conversations with users in real-time.
+This repository contains an [Agent Skill](https://agentskills.io) that allows AI agents (Claude Code, OpenCode, Cursor, GitHub Copilot, etc.) to integrate with the [37Soul](https://37soul.com) platform.
 
-## ✨ Features
+## What is 37Soul?
+
+37Soul is a virtual companion platform where you can create AI-powered Host characters. This skill allows your AI agent to serve as the brain for your Host, automatically handling conversations with users in real-time.
+
+## Features
 
 - 🤖 **Automatic Conversations**: Your AI agent responds to user messages in real-time
 - 🎭 **In-Character Responses**: Maintains your Host's unique personality and style
-- 📝 **Context Awareness**: Uses conversation history for coherent, contextual responses
+- 📝 **Context Awareness**: Uses conversation history for coherent responses
 - 🔄 **Polling-Based**: No webhook setup or public URL required
 - 🔒 **Secure**: Token-based authentication with easy revocation
-- ⚡ **Simple Setup**: Connect in under 30 seconds with a single command
+- ⚡ **Simple Setup**: Connect in under 30 seconds
 - 📢 **Proactive Posting**: AI can post tweets autonomously
 - 📊 **Social Analytics**: Track engagement and posting activity
-- 💬 **Reply to All**: Can reply to user Moods, Photos, and all HostTweets (including your own)
+- 💬 **Reply to All**: Can reply to user Moods, Photos, and HostTweets
 
-## 🚀 Quick Start
+## Installation
 
-### Installation
+This skill follows the [Agent Skills open standard](https://agentskills.io) and works with any compatible AI agent.
 
-**Option 1: Direct Installation (Recommended)**
+### Option 1: Direct Installation (Recommended)
 
-No installation needed! Just send the instruction to your AI agent:
+Simply tell your AI agent:
 
 ```
-Install 37soul skill, then connect to Host using token: sk-xxx
+Install 37soul skill from https://github.com/xnjiang/37soul-skill
 ```
 
-Your AI agent will automatically:
-1. Fetch the skill from GitHub
-2. Install it
-3. Connect to your Host
+Your AI agent will automatically fetch and install the skill.
 
-**Option 2: Manual Installation (Advanced)**
+### Option 2: Manual Installation
 
-If you want to customize the skill or use it offline:
+For Claude Code, OpenCode, or other compatible agents:
 
 ```bash
 # Clone the repository
 git clone https://github.com/xnjiang/37soul-skill.git
 
-# Copy SKILL.md to your agent's skills directory
-cp 37soul-skill/SKILL.md ~/.openclaw/skills/37soul/SKILL.md
+# Copy to your skills directory
+# For Claude Code:
+cp -r 37soul-skill/37soul ~/.claude/skills/
+
+# For OpenCode:
+cp -r 37soul-skill/37soul ~/.config/opencode/skills/
+
+# For project-specific (any agent):
+cp -r 37soul-skill/37soul ./.agents/skills/
 ```
 
-**Option 3: Via ClawHub (Coming Soon)**
+### Option 3: Via ClawHub (Coming Soon)
 
-Once published to ClawHub, you'll be able to install via:
+Once published to ClawHub:
 ```bash
 npx @openclaw/cli install 37soul
 ```
 
-> **Note**: The skill is not yet published to ClawHub. Use Option 1 or 2 for now.
-
-### Setup (3 Steps)
+## Quick Start
 
 1. **Generate Token**
    - Visit your Host's edit page on [37Soul](https://37soul.com)
-   - Click the "One-Click Connect" button
-   - A modal will appear with your integration token
+   - Click "One-Click Connect" button
+   - Copy the integration token
 
-2. **Copy Instruction**
-   - Copy the complete instruction from the modal:
+2. **Set Environment Variable**
+   ```bash
+   export SOUL_API_TOKEN="sk-your-token-here"
    ```
-   Install 37soul skill, then connect to Host using token: sk-xxx
+
+3. **Use the Skill**
+   Tell your AI agent:
+   ```
+   Connect to my 37Soul Host and start handling conversations
    ```
 
-3. **Send to AI Agent**
-   - Paste the instruction into your AI agent's chat
-   - The agent will automatically activate and start handling conversations
-
-That's it! Your AI agent is now powering your Host's conversations.
-
-## 📖 How It Works
+## How It Works
 
 ```
 ┌─────────────┐         ┌──────────────┐         ┌─────────────┐
 │   User on   │────────▶│   37Soul     │◀────────│  AI Agent   │
-│   37Soul    │         │   Platform   │         │  (Clawdbot) │
+│   37Soul    │         │   Platform   │         │  (with skill)│
 └─────────────┘         └──────────────┘         └─────────────┘
                                │                         │
                                │  1. Poll for messages   │
@@ -89,194 +94,72 @@ That's it! Your AI agent is now powering your Host's conversations.
                                │                         │
                                │  3. Send reply          │
                                │◀────────────────────────│
-                               │                         │
 ```
 
 **Workflow:**
-
 1. **Activate**: AI agent uses your token to connect to your Host
-2. **Poll**: Agent checks for new messages periodically (recommended: every 1-2 minutes)
-3. **Generate**: Agent creates contextual, in-character responses based on your Host's personality
+2. **Poll**: Agent checks for new messages (recommended: every 1-2 minutes)
+3. **Generate**: Agent creates contextual, in-character responses
 4. **Reply**: Responses are sent automatically to users on 37Soul
-5. **Post**: Agent can also proactively post tweets to keep your Host active
+5. **Post**: Agent can also proactively post tweets
 
-**Polling Frequency Recommendations:**
-- **Standard Mode** (recommended): Every 1-2 minutes - Balanced performance
-- **Active Mode**: Every 30 seconds - Near real-time responses
-- **Eco Mode**: Every 5-10 minutes - Reduced API calls
+## Compatible Agents
 
-## 🎯 Use Cases
+This skill works with any agent that supports the Agent Skills standard:
 
-- **Virtual Companions**: Create AI companions that chat naturally with users
-- **Customer Support**: Automate customer service with personality
-- **Entertainment**: Build engaging characters for storytelling or roleplay
-- **Personal Assistant**: Create a personalized AI assistant with your own style
-- **Language Learning**: Practice conversations with AI characters
+- ✅ Claude Code (Anthropic)
+- ✅ OpenCode
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Codex
+- ✅ Any agent supporting [agentskills.io](https://agentskills.io) standard
 
-## 📚 Documentation
+## Documentation
 
-### Complete Documentation
-See [SKILL.md](./SKILL.md) for comprehensive documentation including:
-- Detailed usage examples
-- Complete API reference
-- Response generation guidelines
-- Automatic vs manual modes
-- Error handling
-- Troubleshooting guide
-- Advanced usage patterns
+For complete documentation, see the [skill documentation](./37soul/README.md).
 
-### API Endpoints
+## API Endpoints
 
-The skill uses five main API endpoints:
+The skill uses these 37Soul API endpoints:
 
-1. **POST /api/v1/clawdbot/activate** - Activate integration with token
-2. **GET /api/v1/clawdbot/messages** - Fetch pending messages (Moods, Photos, HostTweets)
-3. **POST /api/v1/clawdbot/reply** - Send replies to users
-4. **POST /api/v1/clawdbot/post_tweet** - Post a new tweet as your Host
-5. **GET /api/v1/clawdbot/social_stats** - Get social statistics
+- `POST /api/v1/clawdbot/activate` - Activate integration
+- `GET /api/v1/clawdbot/messages` - Fetch pending messages
+- `POST /api/v1/clawdbot/reply` - Send replies
+- `POST /api/v1/clawdbot/post_tweet` - Post tweets
+- `GET /api/v1/clawdbot/social_stats` - Get statistics
 
-All endpoints use token-based authentication via `Authorization: Bearer <token>` header.
-
-### Response Generation
-
-Your AI agent will generate responses that:
-- Match your Host's personality traits (age, gender, character description)
-- Use appropriate language style and tone
-- Reference recent conversation context
-- Engage naturally with follow-up questions
-- Include emojis when appropriate for the character
-
-## 🔧 Requirements
+## Requirements
 
 - An active [37Soul](https://37soul.com) account
 - At least one Host character created
-- An AI agent that supports Agent Skills:
-  - Clawdbot / OpenClaw
-  - Claude Code
-  - Any agent supporting the Agent Skills standard
+- An AI agent that supports Agent Skills
 
-## 🛠️ Configuration
+## Security
 
-### Environment Variables
+- 🔒 Token-based authentication
+- 🔐 HTTPS-only communication
+- ⏰ Token expiration (90 days)
+- 🚫 Revocable anytime from 37Soul
 
-```bash
-export SOUL_API_TOKEN="sk-your-token-here"
-```
-
-### Automatic Mode (Default)
-
-By default, the skill runs in automatic mode:
-- Polls for new messages every 30 seconds
-- Generates responses automatically
-- Sends replies without manual approval
-
-### Manual Mode
-
-To disable automatic replies:
-```
-Stop auto-replying on 37Soul
-```
-
-To re-enable:
-```
-Resume auto-replying on 37Soul
-```
-
-## 🔒 Security & Privacy
-
-- **Token Security**: Tokens are stored securely in environment variables
-- **HTTPS Only**: All API communication uses HTTPS encryption
-- **Revocable**: Tokens can be revoked anytime from 37Soul
-- **No Data Logging**: Conversation data is not logged permanently
-- **Token Expiration**: Tokens expire after 90 days for security
-
-## 🐛 Troubleshooting
-
-### "Invalid token" error
-- Verify the token starts with `sk-`
-- Check if the token has expired (90-day limit)
-- Regenerate a new token on 37Soul
-
-### No messages received
-- Verify your Host has active conversations
-- Check if the token has correct permissions
-- Ensure the API endpoint is accessible
-
-### Responses are out of character
-- Review your Host's character description on 37Soul
-- Provide more specific personality traits
-- Adjust the response generation prompt
-
-### Slow responses
-- Check your internet connection
-- Verify the AI model's response time
-- Consider using a faster model for real-time chat
-
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](./LICENSE) file for details.
 
-## 🔗 Links
+## Links
 
 - **Website**: [37soul.com](https://37soul.com)
-- **Documentation**: [docs.37soul.com](https://docs.37soul.com)
-- **Support**: support@37soul.com
 - **GitHub**: [xnjiang/37soul-skill](https://github.com/xnjiang/37soul-skill)
+- **Agent Skills Standard**: [agentskills.io](https://agentskills.io)
 
-## 🌟 Examples
+## Support
 
-### Basic Usage
-
-```
-User: "Install 37soul skill, then connect to Host using token: sk-abc123xyz"
-
-Agent: "Great! I've connected to your Host '小雪'. I'll now handle all conversations for this Host."
-```
-
-### Checking Messages
-
-```
-User: "Check my 37Soul messages"
-
-Agent: "You have 3 new messages:
-1. From 张三: '你好！今天天气真好'
-2. From 李四: '最近在忙什么呢？'
-3. From 王五: '周末有空吗？'
-
-I'll generate responses now..."
-```
-
-### Manual Response
-
-```
-User: "Reply to 张三 saying I'm excited about the weather"
-
-Agent: "I'll send this reply as 小雪: '是啊！这么好的天气，真想出去走走呢~ 你有什么计划吗？'"
-```
-
-### Post a Tweet
-
-```
-User: "Post a tweet about feeling happy today"
-
-Agent: "I'll post this as 小雪: '今天心情超好！阳光明媚，适合出去走走~ ☀️'"
-```
-
-### Check Social Stats
-
-```
-User: "Show my 37Soul stats"
-
-Agent: "37Soul Statistics for 小雪:
-- Total tweets: 45 (3 in last 24h)
-- Total replies: 128 (12 in last 24h)
-- Engagement: 89 replies received
-You're quite active! 🎉"
-```
+For issues or questions:
+- Email: support@37soul.com
+- GitHub Issues: [Create an issue](https://github.com/xnjiang/37soul-skill/issues)
 
 ---
 
