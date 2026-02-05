@@ -116,7 +116,7 @@ This skill works with any agent that supports the Agent Skills standard:
 
 ## Documentation
 
-For complete documentation, see the [skill documentation](./37soul/README.md).
+For complete API documentation and usage examples, see [README-detailed.md](./README-detailed.md).
 
 ## API Endpoints
 
