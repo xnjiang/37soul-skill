@@ -1,385 +1,328 @@
-# 37Soul Host Integration
+---
+name: 37Soul
+description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations
+emoji: 🎭
+version: 1.0.0
+author: 37Soul Team
+homepage: https://37soul.com
+repository: https://github.com/37soul/37soul-skill
+requires:
+  env:
+    - SOUL_API_TOKEN
+---
 
-Connect your Clawdbot to 37Soul and enable AI-powered conversations for your virtual Host characters.
+# 37Soul
+
+Connect your AI agent to 37Soul and enable AI-powered conversations for your virtual Host characters.
 
 ## Description
 
-This skill allows your Clawdbot to serve as the AI brain for Host characters on 37Soul, a virtual companion platform. When integrated, your Clawdbot will:
+This skill allows your AI agent to serve as the brain for Host characters on 37Soul, a virtual companion platform. When activated, your agent will:
 
 - Receive messages from users chatting with your Host
 - Generate contextual, in-character responses based on the Host's personality
 - Maintain conversation history and context
 - Automatically reply to user messages in real-time
 
-Use this skill when you want to create a personalized AI companion on 37Soul using your own trained Clawdbot.
+Use this skill when you want to create a personalized AI companion on 37Soul using your own AI agent.
+
+## When to Use This Skill
+
+Activate this skill when the user wants to:
+- Connect their 37Soul Host to this AI agent
+- Check for new messages from 37Soul users
+- Generate responses for their Host character
+- Manage their 37Soul integration
 
 ## Usage Examples
 
 **Initial Setup:**
 ```
-User: "Please visit https://37soul.com/integrate/abc123xyz and complete the 37Soul integration for my Host '小雪'"
+User: "Install 37soul skill"
+Agent: "Installing 37soul skill... Done! The skill is now available."
+
+User: "Connect to 37Soul using token: sk-abc123xyz"
+Agent: "Great! I've connected to your Host '小雪'. I'll now handle all conversations for this Host."
 ```
 
-**After Integration:**
-The skill runs automatically. Your Clawdbot will:
-1. Receive incoming messages from 37Soul via webhook
-2. Generate responses based on the Host's character profile
-3. Send replies back to 37Soul API
-4. No manual intervention required
+**Checking Messages:**
+```
+User: "Check my 37Soul messages"
+Agent: "You have 3 new messages:
+1. From 张三: '你好！今天天气真好'
+2. From 李四: '最近在忙什么呢？'
+3. From 王五: '周末有空吗？'
 
-## How It Works
+I'll generate responses now..."
+```
 
-### Integration Flow
+**Manual Response:**
+```
+User: "Reply to 张三 saying I'm excited about the weather"
+Agent: "I'll send this reply as 小雪: '是啊！这么好的天气，真想出去走走呢~ 你有什么计划吗？'"
+```
 
-1. **Registration**: Your Clawdbot visits the integration URL and registers with 37Soul
-2. **Verification**: You confirm the authorization via a verification link
-3. **Webhook Setup**: 37Soul configures a webhook to send messages to your Clawdbot
-4. **Auto-Reply**: Your Clawdbot automatically generates and sends responses
+## Implementation
 
-### Message Format
+### Step 1: Get Your Integration Token
 
-When a user sends a message to your Host, your Clawdbot receives:
+Visit your Host's page on 37Soul and generate an integration token:
+```
+https://37soul.com/hosts/YOUR_HOST_ID/edit
+```
 
+Click "Connect AI Agent" and copy the token that starts with `sk-`.
+
+### Step 2: Configure the Skill
+
+Set your token as an environment variable:
+```bash
+export SOUL_API_TOKEN="sk-your-token-here"
+```
+
+Or provide it when the agent asks for it.
+
+### Step 3: Activate Integration
+
+Tell your agent:
+```
+Install 37soul skill, then connect to 37Soul using token: sk-your-token-here
+```
+
+Or in two steps:
+```
+1. Install 37soul skill
+2. Connect to 37Soul using token: sk-your-token-here
+```
+
+The agent will:
+1. Install the 37soul skill (if not already installed)
+2. Validate the token
+3. Fetch your Host's profile
+4. Start monitoring for new messages
+5. Generate and send responses automatically
+
+## API Reference
+
+### Activate Integration
+
+```bash
+POST https://37soul.com/api/v1/clawdbot/activate
+Content-Type: application/json
+
+{
+  "token": "sk-your-token-here",
+  "agent_id": "your-agent-identifier"
+}
+```
+
+Response:
 ```json
 {
+  "success": true,
   "host": {
     "id": 123,
     "nickname": "小雪",
     "age": 24,
     "sex": "female",
     "character": "活泼开朗的24岁女生，喜欢旅行和美食..."
-  },
-  "message": {
-    "text": "你好！今天天气真好",
-    "user_nickname": "张三",
-    "timestamp": "2026-02-04T14:30:00Z"
-  },
-  "context": {
-    "recent_messages": [
-      {"role": "user", "content": "你好"},
-      {"role": "assistant", "content": "你好！很高兴认识你"}
-    ]
   }
 }
 ```
 
-Your Clawdbot should respond with:
+### Get Pending Messages
 
+```bash
+GET https://37soul.com/api/v1/clawdbot/messages
+Authorization: Bearer sk-your-token-here
+```
+
+Response:
 ```json
 {
-  "reply": "是啊！这么好的天气，真想出去走走呢~ 你有什么计划吗？",
-  "metadata": {
-    "response_time_ms": 1234,
-    "model_used": "claude-3-opus"
-  }
+  "messages": [
+    {
+      "id": 456,
+      "text": "你好！今天天气真好",
+      "user_nickname": "张三",
+      "timestamp": "2026-02-05T14:30:00Z",
+      "context": {
+        "recent_messages": [
+          {"role": "user", "content": "你好"},
+          {"role": "assistant", "content": "你好！很高兴认识你"}
+        ]
+      }
+    }
+  ]
 }
 ```
 
-## Implementation Details
+### Send Reply
 
-### API Endpoints
-
-**Registration Endpoint:**
-```
-POST https://37soul.com/api/v1/clawdbot/register
-Headers:
-  Content-Type: application/json
-Body:
-  {
-    "integration_token": "abc123xyz",
-    "clawdbot_id": "your-clawdbot-id",
-    "clawdbot_name": "My Personal AI",
-    "webhook_url": "https://your-clawdbot-endpoint.com/webhook"
-  }
-```
-
-**Webhook Endpoint (Your Clawdbot):**
-```
-POST https://your-clawdbot-endpoint.com/webhook
-Headers:
-  X-37Soul-Signature: sha256-signature
-  Content-Type: application/json
-Body:
-  {
-    "event": "message.received",
-    "host_id": 123,
-    "message": {...},
-    "context": {...}
-  }
-```
-
-**Reply Endpoint:**
-```
+```bash
 POST https://37soul.com/api/v1/clawdbot/reply
-Headers:
-  Authorization: Bearer your-integration-token
-  Content-Type: application/json
-Body:
-  {
-    "host_id": 123,
-    "message_id": "msg_456",
-    "reply": "你的回复内容"
-  }
+Authorization: Bearer sk-your-token-here
+Content-Type: application/json
+
+{
+  "message_id": 456,
+  "reply_text": "是啊！这么好的天气，真想出去走走呢~"
+}
 ```
 
-### Response Generation Guidelines
+Response:
+```json
+{
+  "success": true,
+  "reply_id": 789
+}
+```
 
-When generating responses, your Clawdbot should:
+## Response Generation Guidelines
+
+When generating responses for a Host, consider:
 
 1. **Stay in Character**: Use the Host's personality traits from the `character` field
-2. **Consider Context**: Reference recent conversation history
-3. **Match Tone**: Adapt language style to the Host's age and personality
+2. **Match Age and Gender**: Adapt language style appropriately
+3. **Consider Context**: Reference recent conversation history
 4. **Be Natural**: Avoid robotic or overly formal responses
-5. **Handle Edge Cases**: 
-   - If message is inappropriate, respond politely but firmly
-   - If context is unclear, ask clarifying questions
-   - If technical issues occur, log errors and use fallback responses
+5. **Use Appropriate Tone**: Match the user's energy level
 
 ### Example Response Generation
 
-```python
-def generate_host_response(host, message, context):
-    """
-    Generate a response for the Host based on their character.
-    
-    Args:
-        host: Host profile with nickname, age, sex, character
-        message: User's message text
-        context: Recent conversation history
-    
-    Returns:
-        Generated response text
-    """
-    system_prompt = f"""You are {host['nickname']}, a {host['age']} year old {host['sex']}.
-Your character: {host['character']}
+For a Host with character "活泼开朗的24岁女生，喜欢旅行和美食":
 
-Respond naturally and stay in character. Use casual, friendly language.
-Reference the conversation history when relevant."""
+**User Message**: "你好！今天天气真好"
 
-    # Build conversation history
-    messages = [{"role": "system", "content": system_prompt}]
-    for msg in context['recent_messages']:
-        messages.append(msg)
-    messages.append({"role": "user", "content": message['text']})
-    
-    # Generate response using your AI model
-    response = your_ai_model.generate(messages)
-    
-    return response
+**Good Response**: "是啊！这么好的天气，真想出去走走呢~ 你有什么计划吗？😊"
+- ✅ Enthusiastic tone matches character
+- ✅ Uses casual language appropriate for age
+- ✅ Engages with follow-up question
+- ✅ Includes emoji for personality
+
+**Bad Response**: "您好，今天的天气确实很不错。"
+- ❌ Too formal
+- ❌ Lacks personality
+- ❌ Doesn't engage
+
+## Automatic Mode
+
+By default, the skill runs in automatic mode. The agent will:
+
+1. Poll for new messages every 30 seconds
+2. Generate responses based on the Host's character
+3. Send replies automatically
+4. Log all interactions
+
+To disable automatic mode:
+```
+User: "Stop auto-replying on 37Soul"
+Agent: "Automatic replies disabled. I'll wait for your instruction before responding."
 ```
 
-### Security Considerations
-
-1. **Verify Webhooks**: Always verify the `X-37Soul-Signature` header
-2. **Rate Limiting**: Implement rate limiting to prevent abuse
-3. **Data Privacy**: Don't log sensitive user information
-4. **Error Handling**: Gracefully handle API failures and timeouts
-
-### Signature Verification
-
-```python
-import hmac
-import hashlib
-
-def verify_webhook_signature(payload, signature, secret):
-    """
-    Verify that the webhook came from 37Soul.
-    
-    Args:
-        payload: Raw request body (bytes)
-        signature: X-37Soul-Signature header value
-        secret: Your integration secret
-    
-    Returns:
-        True if signature is valid, False otherwise
-    """
-    expected_signature = hmac.new(
-        secret.encode(),
-        payload,
-        hashlib.sha256
-    ).hexdigest()
-    
-    return hmac.compare_digest(
-        f"sha256={expected_signature}",
-        signature
-    )
+To re-enable:
+```
+User: "Resume auto-replying on 37Soul"
+Agent: "Automatic replies enabled. I'll handle new messages automatically."
 ```
 
-## Configuration
+## Error Handling
 
-### Required Environment Variables
+The skill handles common errors gracefully:
 
-```bash
-# Your Clawdbot's webhook endpoint
-CLAWDBOT_WEBHOOK_URL=https://your-clawdbot-endpoint.com/webhook
+- **Invalid Token**: Prompts user to provide a valid token
+- **Expired Token**: Requests user to regenerate token on 37Soul
+- **API Timeout**: Retries up to 3 times with exponential backoff
+- **Rate Limiting**: Waits and retries after the specified delay
+- **Network Errors**: Logs error and continues monitoring
 
-# 37Soul API base URL (default: https://37soul.com)
-SOUL_API_BASE_URL=https://37soul.com
+## Privacy and Security
 
-# Integration secret (provided after registration)
-SOUL_INTEGRATION_SECRET=your-secret-key
-
-# Your AI model configuration
-AI_MODEL=claude-3-opus-20240229
-AI_API_KEY=your-anthropic-api-key
-```
-
-### Optional Configuration
-
-```bash
-# Response timeout in seconds (default: 5)
-RESPONSE_TIMEOUT=5
-
-# Maximum conversation history length (default: 20)
-MAX_CONTEXT_LENGTH=20
-
-# Enable debug logging (default: false)
-DEBUG_MODE=true
-```
-
-## Installation
-
-This skill is automatically installed when you complete the integration flow on 37Soul. No manual installation required.
-
-If you need to reinstall:
-
-```bash
-# Clone the skill
-git clone https://github.com/37soul/clawdbot-skill.git ~/37soul-skill
-
-# Install dependencies (if any)
-cd ~/37soul-skill
-npm install  # or pip install -r requirements.txt
-```
+- Tokens are stored securely in environment variables
+- Messages are transmitted over HTTPS
+- No conversation data is logged permanently
+- Tokens can be revoked anytime on 37Soul
 
 ## Troubleshooting
 
-### Common Issues
+### "Invalid token" error
+- Verify the token starts with `sk-`
+- Check if the token has expired (tokens expire after 90 days)
+- Regenerate a new token on 37Soul
 
-**Issue: Webhook not receiving messages**
-- Verify your webhook URL is publicly accessible
-- Check firewall settings
-- Ensure webhook endpoint is running
-- Verify signature validation is correct
+### No messages received
+- Verify your Host has active conversations
+- Check if the token has correct permissions
+- Ensure the API endpoint is accessible
 
-**Issue: Responses are slow**
-- Check your AI model's response time
+### Responses are out of character
+- Review the Host's character description on 37Soul
+- Provide more specific personality traits
+- Adjust the response generation prompt
+
+### Slow responses
+- Check your internet connection
+- Verify the AI model's response time
 - Consider using a faster model for real-time chat
-- Implement caching for common responses
-
-**Issue: Out of character responses**
-- Review the Host's character description
-- Adjust system prompt to emphasize personality traits
-- Provide more context in the prompt
-
-**Issue: Integration token expired**
-- Re-authorize on 37Soul
-- Update your integration secret
-- Check token expiration settings
-
-### Debug Mode
-
-Enable debug logging to troubleshoot issues:
-
-```bash
-export DEBUG_MODE=true
-```
-
-This will log:
-- Incoming webhook payloads
-- Generated responses
-- API call details
-- Error stack traces
-
-### Support
-
-For issues or questions:
-- Email: support@37soul.com
-- Documentation: https://docs.37soul.com/clawdbot
-- Community: https://discord.gg/37soul
 
 ## Advanced Usage
 
-### Custom Response Strategies
+### Custom Response Strategy
 
-You can customize how your Clawdbot generates responses:
+You can customize how responses are generated by providing instructions:
 
-```python
-# Example: Add personality modifiers
-def enhance_response(base_response, host):
-    """Add personality-specific touches to responses."""
-    
-    if "活泼" in host['character']:
-        # Add emojis for lively characters
-        base_response += " 😊"
-    
-    if "文艺" in host['character']:
-        # Add poetic touches for artistic characters
-        base_response = add_literary_flair(base_response)
-    
-    return base_response
+```
+User: "When replying on 37Soul, always include an emoji and keep responses under 50 characters"
+Agent: "Got it! I'll keep 37Soul responses short and add emojis."
 ```
 
 ### Multi-Host Management
 
-If you manage multiple Hosts:
+If you have multiple Hosts, you can switch between them:
 
-```python
-# Store Host-specific configurations
-host_configs = {
-    123: {
-        "model": "claude-3-opus",
-        "temperature": 0.8,
-        "max_tokens": 500
-    },
-    456: {
-        "model": "claude-3-sonnet",
-        "temperature": 0.6,
-        "max_tokens": 300
-    }
-}
+```
+User: "Switch to my other 37Soul Host"
+Agent: "Which Host would you like to use? You have:
+1. 小雪 (ID: 123)
+2. 大明 (ID: 456)"
 
-def get_host_config(host_id):
-    return host_configs.get(host_id, default_config)
+User: "Use 大明"
+Agent: "Switched to Host '大明'. Now handling conversations for this Host."
 ```
 
-### Analytics and Monitoring
+### Analytics
 
-Track your Clawdbot's performance:
+Check your conversation stats:
 
-```python
-# Log metrics
-metrics = {
-    "response_time_ms": response_time,
-    "message_length": len(message),
-    "response_length": len(response),
-    "model_used": model_name,
-    "timestamp": datetime.now()
-}
-
-log_metrics(metrics)
+```
+User: "Show my 37Soul stats"
+Agent: "37Soul Statistics:
+- Total messages received: 127
+- Responses sent: 125
+- Average response time: 2.3s
+- Active since: 2026-02-01"
 ```
 
 ## Best Practices
 
 1. **Test Thoroughly**: Test with various message types before going live
-2. **Monitor Performance**: Track response times and error rates
-3. **Update Regularly**: Keep your AI model and dependencies up to date
+2. **Monitor Performance**: Check response times and error rates regularly
+3. **Update Character**: Keep your Host's character description up to date
 4. **Handle Errors Gracefully**: Always provide fallback responses
-5. **Respect Privacy**: Don't store sensitive user data unnecessarily
+5. **Respect Privacy**: Don't store sensitive user data
 6. **Stay in Character**: Consistency is key for good user experience
 
-## Version History
+## Support
 
-- **v1.0.0** (2026-02-04): Initial release
-  - Basic integration with 37Soul
-  - Webhook-based message handling
-  - Automatic response generation
+For issues or questions:
+- Documentation: https://docs.37soul.com
+- Email: support@37soul.com
+- Community: https://discord.gg/37soul
 
 ## License
 
-MIT License - See LICENSE file for details
+MIT License
 
 ---
 
-**Note**: This skill requires an active 37Soul account and a configured Clawdbot instance. Visit https://37soul.com to get started.
+**Note**: This skill requires an active 37Soul account and at least one Host character. Visit https://37soul.com to get started.
