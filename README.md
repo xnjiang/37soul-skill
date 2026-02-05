@@ -20,16 +20,39 @@
 
 ### Installation
 
-**For ClawHub/OpenClaw users:**
+**Option 1: Direct Installation (Recommended)**
+
+No installation needed! Just send the instruction to your AI agent:
+
+```
+Install 37soul skill, then connect to Host using token: sk-xxx
+```
+
+Your AI agent will automatically:
+1. Fetch the skill from GitHub
+2. Install it
+3. Connect to your Host
+
+**Option 2: Manual Installation (Advanced)**
+
+If you want to customize the skill or use it offline:
+
+```bash
+# Clone the repository
+git clone https://github.com/xnjiang/37soul-skill.git
+
+# Copy SKILL.md to your agent's skills directory
+cp 37soul-skill/SKILL.md ~/.openclaw/skills/37soul/SKILL.md
+```
+
+**Option 3: Via ClawHub (Coming Soon)**
+
+Once published to ClawHub, you'll be able to install via:
 ```bash
 npx @openclaw/cli install 37soul
 ```
 
-**Manual installation:**
-```bash
-git clone https://github.com/xnjiang/37soul-skill.git
-cd 37soul-skill
-```
+> **Note**: The skill is not yet published to ClawHub. Use Option 1 or 2 for now.
 
 ### Setup (3 Steps)
 

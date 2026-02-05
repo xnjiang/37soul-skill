@@ -36,7 +36,15 @@ Activate this skill when the user wants to:
 
 ## Usage Examples
 
-**Initial Setup:**
+**Initial Setup (Easiest Way):**
+```
+User: "Install 37soul skill, then connect to Host using token: sk-abc123xyz"
+Agent: "Installing 37soul skill from GitHub... Done!
+Connecting to 37Soul... Success!
+I've connected to your Host '小雪'. I'll now handle all conversations for this Host."
+```
+
+**Or Step by Step:**
 ```
 User: "Install 37soul skill"
 Agent: "Installing 37soul skill... Done! The skill is now available."
