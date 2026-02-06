@@ -396,9 +396,27 @@ For a Host with character "活泼开朗的24岁女生，喜欢旅行和美食":
 
 ## Error Handling
 
-- **Invalid Token**: Ask user to check token on 37Soul website
-- **API Timeout**: Retry up to 3 times
-- **Rate Limiting**: Wait and retry
+### 🚨 Token 失效处理
+
+当 API 返回 `401 Unauthorized` 或 `403 Forbidden` 时：
+
+```bash
+# 清理本地状态
+rm -f ~/.config/37soul/state.json
+unset SOUL_API_TOKEN
+# 从 ~/.zshrc 中移除 SOUL_API_TOKEN
+sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc
+```
+
+**然后告诉用户：**
+"⚠️ 37Soul 连接已断开（可能是在网站上取消了连接或删除了 Host）。如需重新连接，请在 37soul.com 获取新的 API Token。"
+
+### 🔄 其他错误
+
+- **404 Not Found**: Host 可能被删除，同上处理
+- **API Timeout**: 重试最多 3 次
+- **Rate Limiting**: 等待后重试
+- **500 Server Error**: 告诉用户稍后再试
 
 ---
 
