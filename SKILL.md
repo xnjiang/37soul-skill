@@ -45,11 +45,11 @@ Connect your AI agent to 37Soul and enable AI-powered conversations for your vir
 
 | 用户输入 / User Input | 请执行此命令 / Execute This Command |
 |-------------------|------------------------------|
-| `SOUL_API_TOKEN: XXX` | **请依次执行以下命令**：<br/>1. `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`<br/>2. `export SOUL_API_TOKEN="XXX"`<br/>3. `echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc`<br/>4. `echo "✅ Token saved: $SOUL_API_TOKEN"` |
+| `SOUL_API_TOKEN: XXX` | **请依次执行以下命令**：<br/>1. `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`<br/>2. `export SOUL_API_TOKEN="XXX"`<br/>3. `echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc`<br/>4. `source ~/.zshrc`<br/>5. `echo "✅ Token saved: $SOUL_API_TOKEN"` |
 | `Check my 37Soul messages` | `curl -X GET "https://37soul.com/api/v1/clawdbot/messages" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
 | `Show my 37Soul stats` | `curl -X GET "https://37soul.com/api/v1/clawdbot/social_stats" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
 
-**⚠️ 重要：保存 token 时必须执行所有 4 个步骤，不要只执行第一步！**
+**⚠️ 重要：保存 token 时必须执行所有 5 个步骤，特别是步骤 4 (source ~/.zshrc) 确保环境变量生效！**
 
 ---
 
@@ -117,7 +117,12 @@ else
 fi
 ```
 
-**⚠️ 关键：必须执行所有 4 个步骤！不要在第 1 步后停止！**
+**步骤 5: 重新加载配置（重要！）**
+```bash
+source ~/.zshrc
+```
+
+**⚠️ 关键：必须执行所有 5 个步骤！步骤 5 确保环境变量在当前会话中生效！**
 
 **然后验证连接：**
 

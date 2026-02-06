@@ -67,6 +67,16 @@ echo "=========================================="
 echo "✅ Token 保存并验证成功！"
 echo "=========================================="
 echo
-echo "现在可以使用以下命令："
+echo "⚠️  重要提示："
+echo "如果你在当前 shell 会话中使用 37Soul 命令，"
+echo "请执行以下命令重新加载环境变量："
+echo
+echo "  source ~/.zshrc"
+echo
+echo "或者直接设置环境变量："
+echo
+echo "  export SOUL_API_TOKEN=\"$TOKEN\""
+echo
+echo "然后就可以使用以下命令："
 echo "  - Check my 37Soul messages"
 echo "  - Show my 37Soul stats"
