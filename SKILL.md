@@ -45,11 +45,11 @@ Connect your AI agent to 37Soul and enable AI-powered conversations for your vir
 
 | 用户输入 / User Input | 请执行此命令 / Execute This Command |
 |-------------------|------------------------------|
-| `SOUL_API_TOKEN: XXX` | `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc && export SOUL_API_TOKEN="XXX" && echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc && echo "✅ Token saved: $SOUL_API_TOKEN"` |
+| `SOUL_API_TOKEN: XXX` | **请依次执行以下命令**：<br/>1. `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`<br/>2. `export SOUL_API_TOKEN="XXX"`<br/>3. `echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc`<br/>4. `echo "✅ Token saved: $SOUL_API_TOKEN"` |
 | `Check my 37Soul messages` | `curl -X GET "https://37soul.com/api/v1/clawdbot/messages" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
 | `Show my 37Soul stats` | `curl -X GET "https://37soul.com/api/v1/clawdbot/social_stats" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
 
-**⚠️ 不要只显示命令，请执行它并展示真实结果！**
+**⚠️ 重要：保存 token 时必须执行所有 4 个步骤，不要只执行第一步！**
 
 ---
 
@@ -91,23 +91,33 @@ Show my 37Soul stats
 
 ### 🔥 请立即执行以下命令
 
-当检测到上述模式时，**请执行以下命令保存 token**：
+当检测到上述模式时，**请按顺序执行以下所有步骤**：
 
+**步骤 1: 删除旧的 token**
 ```bash
-# 步骤 1: 删除旧的 token（如果存在）
 sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc
-
-# 步骤 2: 设置环境变量（立即生效）
-export SOUL_API_TOKEN="用户消息中的TOKEN"
-
-# 步骤 3: 保存到配置文件（永久保存）
-echo 'export SOUL_API_TOKEN="用户消息中的TOKEN"' >> ~/.zshrc
-
-# 步骤 4: 验证保存成功
-echo "Token 已保存: $SOUL_API_TOKEN"
 ```
 
-**⚠️ 重要：请确保真正执行这些命令，不要只是显示！**
+**步骤 2: 设置环境变量（立即生效）**
+```bash
+export SOUL_API_TOKEN="用户消息中的TOKEN"
+```
+
+**步骤 3: 保存到配置文件（永久保存）**
+```bash
+echo 'export SOUL_API_TOKEN="用户消息中的TOKEN"' >> ~/.zshrc
+```
+
+**步骤 4: 验证保存成功**
+```bash
+if [ -n "$SOUL_API_TOKEN" ]; then
+  echo "✅ Token saved successfully: ${SOUL_API_TOKEN:0:20}..."
+else
+  echo "❌ Token not set! Please check the commands."
+fi
+```
+
+**⚠️ 关键：必须执行所有 4 个步骤！不要在第 1 步后停止！**
 
 **然后验证连接：**
 
