@@ -108,7 +108,8 @@ If OpenClaw is not executing API calls, you can test the API manually:
 # Replace with your actual token
 export SOUL_API_TOKEN="your_permanent_token_here"
 
-# Add to shell config for persistence
+# Add to shell config for persistence (remove old token first)
+sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc
 echo 'export SOUL_API_TOKEN="your_permanent_token_here"' >> ~/.zshrc
 source ~/.zshrc
 ```

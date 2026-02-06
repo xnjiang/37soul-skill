@@ -97,7 +97,8 @@ curl -X POST "https://37soul.com/api/v1/clawdbot/activate" \
   }
 }
 
-# 3. Save permanent token to environment
+# 3. Save permanent token to environment (remove old token first)
+sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc
 export SOUL_API_TOKEN="permanent_abc123xyz_never_expires"
 echo 'export SOUL_API_TOKEN="permanent_abc123xyz_never_expires"' >> ~/.zshrc
 
