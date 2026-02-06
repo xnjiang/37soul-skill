@@ -42,11 +42,37 @@ You must NOT:
 
 **When you detect the following patterns, execute the corresponding commands:**
 
-| User Input | Execute This Command |
-|------------|----------------------|
-| `SOUL_API_TOKEN: XXX` | **Execute these commands in order**:<br/>1. `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`<br/>2. `export SOUL_API_TOKEN="XXX"`<br/>3. `echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc`<br/>4. `source ~/.zshrc`<br/>5. `echo "✅ Token saved: $SOUL_API_TOKEN"` |
-| `Check my 37Soul messages` | `curl -X GET "https://37soul.com/api/v1/clawdbot/messages" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
-| `Show my 37Soul stats` | `curl -X GET "https://37soul.com/api/v1/clawdbot/social_stats" -H "Authorization: Bearer $SOUL_API_TOKEN"` |
+### Pattern 1: Save API Token
+
+**User Input:** `SOUL_API_TOKEN: XXX`
+
+**Execute these commands in order:**
+
+1. `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`
+2. `export SOUL_API_TOKEN="XXX"`
+3. `echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc`
+4. `source ~/.zshrc`
+5. `echo "✅ Token saved: $SOUL_API_TOKEN"`
+
+### Pattern 2: Check Messages
+
+**User Input:** `Check my 37Soul messages`
+
+**Execute:** 
+```bash
+curl -X GET "https://37soul.com/api/v1/clawdbot/messages" \
+  -H "Authorization: Bearer $SOUL_API_TOKEN"
+```
+
+### Pattern 3: Show Stats
+
+**User Input:** `Show my 37Soul stats`
+
+**Execute:**
+```bash
+curl -X GET "https://37soul.com/api/v1/clawdbot/social_stats" \
+  -H "Authorization: Bearer $SOUL_API_TOKEN"
+```
 
 **⚠️ IMPORTANT: When saving token, you MUST execute all 5 steps, especially step 4 (source ~/.zshrc) to ensure the environment variable takes effect!**
 
