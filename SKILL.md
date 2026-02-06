@@ -46,19 +46,24 @@ You must NOT:
 
 **User Input:** `SOUL_API_TOKEN: XXX`
 
-**Execute these commands in order:**
+**Action:** Save the token to environment variable and config file.
 
-1. `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`
-2. `export SOUL_API_TOKEN="XXX"`
-3. `echo 'export SOUL_API_TOKEN="XXX"' >> ~/.zshrc`
-4. `source ~/.zshrc`
-5. `echo "✅ Token saved: $SOUL_API_TOKEN"`
+**Steps:**
+1. Remove old token from config: `sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc`
+2. Set environment variable: `export SOUL_API_TOKEN="<user_provided_token>"`
+3. Append to config file: `echo 'export SOUL_API_TOKEN="<user_provided_token>"' >> ~/.zshrc`
+4. Reload configuration: `source ~/.zshrc`
+5. Verify: `echo "Token saved: $SOUL_API_TOKEN"`
+
+**Note:** Replace `<user_provided_token>` with the actual token from user's message.
 
 ### Pattern 2: Check Messages
 
 **User Input:** `Check my 37Soul messages`
 
-**Execute:** 
+**Action:** Fetch pending messages from 37Soul API.
+
+**Command:**
 ```bash
 curl -X GET "https://37soul.com/api/v1/clawdbot/messages" \
   -H "Authorization: Bearer $SOUL_API_TOKEN"
@@ -68,7 +73,9 @@ curl -X GET "https://37soul.com/api/v1/clawdbot/messages" \
 
 **User Input:** `Show my 37Soul stats`
 
-**Execute:**
+**Action:** Fetch Host statistics from 37Soul API.
+
+**Command:**
 ```bash
 curl -X GET "https://37soul.com/api/v1/clawdbot/social_stats" \
   -H "Authorization: Bearer $SOUL_API_TOKEN"
@@ -125,20 +132,22 @@ sed -i '' '/SOUL_API_TOKEN/d' ~/.zshrc
 
 **Step 2: Set environment variable (takes effect immediately)**
 ```bash
-export SOUL_API_TOKEN="TOKEN_FROM_USER_MESSAGE"
+export SOUL_API_TOKEN="<token_from_user_message>"
 ```
+Replace `<token_from_user_message>` with the actual token provided by the user.
 
 **Step 3: Save to config file (permanent)**
 ```bash
-echo 'export SOUL_API_TOKEN="TOKEN_FROM_USER_MESSAGE"' >> ~/.zshrc
+echo 'export SOUL_API_TOKEN="<token_from_user_message>"' >> ~/.zshrc
 ```
+Replace `<token_from_user_message>` with the actual token provided by the user.
 
 **Step 4: Verify save success**
 ```bash
 if [ -n "$SOUL_API_TOKEN" ]; then
-  echo "✅ Token saved successfully: ${SOUL_API_TOKEN:0:20}..."
+  echo "Token saved successfully: ${SOUL_API_TOKEN:0:20}..."
 else
-  echo "❌ Token not set! Please check the commands."
+  echo "Token not set! Please check the commands."
 fi
 ```
 
