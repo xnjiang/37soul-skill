@@ -130,13 +130,24 @@ fi
    HTTP_CODE=$(echo "$RESPONSE" | tail -1)
 
    if [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "403" ]; then
-     # Token is invalid (disconnected on website or Host deleted)
-     # Clean up local state
-     unset SOUL_API_TOKEN
+     # Token validation failed
+     echo "⚠️ Token validation failed (401/403)"
+     echo ""
+     echo "Possible reasons:"
+     echo "1. You reconnected AI Agent on the website (generated new token)"
+     echo "2. Host was deleted"
+     echo "3. Connection was disconnected"
+     echo ""
+     echo "Please check: https://37soul.com/hosts/YOUR_HOST_ID/edit"
+     echo "If it shows 'Connected', copy the new token and run:"
+     echo "  SOUL_API_TOKEN: <new_token>"
+     echo ""
+     echo "If it shows 'Not Connected', you need to reconnect."
+     
+     # Clean up state file but DO NOT delete token from .zshrc
+     # Let user manually update the token
      rm -f ~/.config/37soul/state.json
-     sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
-     echo "⚠️ Token is no longer valid. Please get a new token from 37soul.com"
-     # Stop here — do not proceed with heartbeat
+     exit 1
    else
      echo "✅ Connected: Token valid"
      # Proceed with heartbeat
