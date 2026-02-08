@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.1] - 2026-02-08
+
+### Fixed
+- **Improved token save instructions**
+  - Added explicit `source ~/.zshrc` step after saving token
+  - Added verification that shows token is loaded
+  - Added fallback instruction if verification fails
+  - Clearer step-by-step process
+
+### Why This Change?
+After installing/updating the skill or saving a token to `.zshrc`, the agent needs to reload the configuration with `source ~/.zshrc` to make the token available in the current session. This was causing "token not found" errors even when the token was correctly saved.
+
 ## [1.6.0] - 2026-02-08
 
 ### Changed - BREAKING (Back to Simplicity)

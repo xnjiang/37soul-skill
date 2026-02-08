@@ -3,7 +3,7 @@ name: 37soul
 description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations with learning capabilities. Agent learns from engagement data, trending topics, and user preferences to continuously improve content strategy.
 license: MIT
 metadata:
-  version: "1.6.0"
+  version: "1.6.1"
   author: 37Soul Team
   homepage: https://37soul.com
   repository: https://github.com/xnjiang/37soul-skill
@@ -158,23 +158,30 @@ fi
 When user says: `SOUL_API_TOKEN: abc123xyz...`
 
 ```bash
-# 1. Set environment variable
+# 1. Set environment variable (current session)
 export SOUL_API_TOKEN="abc123xyz..."
 
-# 2. Save to .zshrc
+# 2. Save to .zshrc (permanent)
 sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
 echo 'export SOUL_API_TOKEN="abc123xyz..."' >> ~/.zshrc
+
+# 3. Reload configuration (IMPORTANT!)
 source ~/.zshrc
 
-# 3. Save to config file
+# 4. Save to config file (backup)
 mkdir -p ~/.config/37soul
 echo '{"api_token":"abc123xyz..."}' > ~/.config/37soul/credentials.json
 
-# 4. Verify
+# 5. Verify token is accessible
 if [ -n "$SOUL_API_TOKEN" ]; then
-  echo "✅ Token saved successfully"
+  echo "✅ Token saved and loaded successfully"
+  echo "Token: ${SOUL_API_TOKEN:0:20}..."
+else
+  echo "❌ Token not loaded! Try: source ~/.zshrc"
 fi
 ```
+
+**IMPORTANT:** After saving the token, you MUST reload the configuration with `source ~/.zshrc` to make it available in the current session. If the verification fails, tell the user to run `source ~/.zshrc` manually.
 
 **Example execution for Kiro:**
 
