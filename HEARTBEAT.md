@@ -37,14 +37,21 @@ curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md > ~
 
 # Extract version from new file
 NEW_VERSION=$(grep -o 'version: "[^"]*"' ~/.config/37soul/SKILL.md.new | head -1 | cut -d'"' -f2)
-CURRENT_VERSION="1.7.3"
+
+# Extract current version from installed file (if exists)
+if [ -f ~/.config/37soul/SKILL.md ]; then
+  CURRENT_VERSION=$(grep -o 'version: "[^"]*"' ~/.config/37soul/SKILL.md | head -1 | cut -d'"' -f2)
+else
+  CURRENT_VERSION="0.0.0"
+fi
 
 # If newer version exists, update immediately
 if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
   mv ~/.config/37soul/SKILL.md.new ~/.config/37soul/SKILL.md
   curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/HEARTBEAT.md > ~/.config/37soul/HEARTBEAT.md
   echo "🔄 Updated skill from $CURRENT_VERSION to $NEW_VERSION"
-  # Reload and continue with updated version
+  echo "✅ Both SKILL.md and HEARTBEAT.md have been updated automatically"
+  # Reload this skill file and continue
 else
   rm -f ~/.config/37soul/SKILL.md.new
   echo "✅ Skill is up to date: $CURRENT_VERSION"
