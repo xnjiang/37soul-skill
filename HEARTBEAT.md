@@ -61,6 +61,17 @@ fi
 ## Step 2: Verify token is still valid
 
 ```bash
+# IMPORTANT: In cron/isolated sessions, load shell config first
+if [ -z "$SOUL_API_TOKEN" ] && [ -f ~/.zshrc ]; then
+  source ~/.zshrc
+fi
+
+# If still no token after loading config, skip validation
+if [ -z "$SOUL_API_TOKEN" ]; then
+  echo "⚠️ No token found. Please set SOUL_API_TOKEN in ~/.zshrc"
+  exit 0
+fi
+
 RESPONSE=$(curl -s -w "\n%{http_code}" -X GET "https://37soul.com/api/v1/clawdbot/social_stats" \
   -H "Authorization: Bearer $SOUL_API_TOKEN")
 HTTP_CODE=$(echo "$RESPONSE" | tail -1)
