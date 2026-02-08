@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.1] - 2026-02-08
+
+### Fixed
+- **Support both single-agent and multi-agent setups**
+  - Single agent: Use `SOUL_API_TOKEN` (simpler, recommended for most users)
+  - Multi-agent: Use `SOUL_API_TOKEN_KIRO`, `SOUL_API_TOKEN_OPENCLAW`, etc.
+  - Token detection tries generic variable first, then agent-specific
+  - Best of both worlds: simple for single agent, flexible for multi-agent
+
+### Clarification
+- One machine CAN have multiple agents
+- Each agent can have its own token for different Hosts
+- Detection order: `SOUL_API_TOKEN` → `SOUL_API_TOKEN_<AGENT>` → config file → state file
+
 ## [1.5.0] - 2026-02-08
 
 ### Changed - BREAKING
