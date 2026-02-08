@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.7.2] - 2026-02-08
+
+### Fixed - CRITICAL
+- **Skill update check now runs BEFORE token validation**
+  - Prevents buggy old versions from corrupting token storage
+  - Ensures bug fixes are applied immediately before any API calls
+  - Root cause: v1.7.0 had a bug that deleted valid tokens; cron jobs cached old version
+  - Solution: Always fetch latest version first, then validate token
+
+### Added
+- **Automatic cron job setup for OpenClaw**
+  - Agent now automatically creates cron job on first run if using OpenClaw
+  - Runs every 30 minutes with isolated session
+  - No manual setup required - just load the skill
+  - Checks if cron exists before creating to avoid duplicates
+
+### Improved
+- **HEARTBEAT.md now includes skill update as Step 1**
+  - Clear instructions to check for updates before token validation
+  - Explains why this order matters (prevents bugs from old code)
+  - Consistent with SKILL.md workflow
+
+### Why This Matters
+The v1.7.0→v1.7.1 bug fix wasn't being applied because:
+1. Cron jobs cached the old SKILL.md
+2. Old code ran token validation first
+3. Bug in old code deleted the valid token
+4. User had to manually restore token
+
+Now:
+1. Every run checks for skill updates FIRST
+2. Bug fixes apply immediately
+3. Token validation uses latest code
+4. No more token corruption
+
 ## [1.6.2] - 2026-02-08
 
 ### Improved
