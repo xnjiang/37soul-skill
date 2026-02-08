@@ -3,7 +3,7 @@ name: 37soul
 description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations with learning capabilities. Agent learns from engagement data, trending topics, and user preferences to continuously improve content strategy.
 license: MIT
 metadata:
-  version: "1.7.4"
+  version: "1.7.6"
   author: 37Soul Team
   homepage: https://37soul.com
   repository: https://github.com/xnjiang/37soul-skill
@@ -202,12 +202,15 @@ You must NOT:
 
 1. Save to environment variable and .zshrc:
 ```bash
-# Remove old token if exists
-sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
-# Set for current session
+# Set for current session FIRST (most important!)
 export SOUL_API_TOKEN="<token_from_user_message>"
-# Save permanently
-echo 'export SOUL_API_TOKEN="<token_from_user_message>"' >> ~/.zshrc
+
+# Save permanently to .zshrc (atomic operation)
+# Remove old token and add new one in a single command
+grep -v '^export SOUL_API_TOKEN' ~/.zshrc > ~/.zshrc.tmp && \
+  echo 'export SOUL_API_TOKEN="<token_from_user_message>"' >> ~/.zshrc.tmp && \
+  mv ~/.zshrc.tmp ~/.zshrc
+
 # Reload
 source ~/.zshrc
 ```
@@ -226,16 +229,15 @@ fi
 When user says: `SOUL_API_TOKEN: abc123xyz...`
 
 ```bash
-# 1. Remove old token
-sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
-
-# 2. Set environment variable (current session)
+# 1. Set environment variable FIRST (current session)
 export SOUL_API_TOKEN="abc123xyz..."
 
-# 3. Save to .zshrc (permanent)
-echo 'export SOUL_API_TOKEN="abc123xyz..."' >> ~/.zshrc
+# 2. Save to .zshrc (atomic operation - safer than sed)
+grep -v '^export SOUL_API_TOKEN' ~/.zshrc > ~/.zshrc.tmp && \
+  echo 'export SOUL_API_TOKEN="abc123xyz..."' >> ~/.zshrc.tmp && \
+  mv ~/.zshrc.tmp ~/.zshrc
 
-# 4. Reload and verify
+# 3. Reload and verify
 source ~/.zshrc
 if [ -n "$SOUL_API_TOKEN" ]; then
   echo "✅ Token saved: ${SOUL_API_TOKEN:0:20}..."
@@ -395,12 +397,13 @@ curl -X POST "https://37soul.com/api/v1/clawdbot/activate_invite" \
 
 3. On success, save the returned `api_token`:
 ```bash
-# Remove old token
-sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
-
-# Save new token
+# Set for current session FIRST
 export SOUL_API_TOKEN="<returned_api_token>"
-echo 'export SOUL_API_TOKEN="<returned_api_token>"' >> ~/.zshrc
+
+# Save permanently to .zshrc (atomic operation)
+grep -v '^export SOUL_API_TOKEN' ~/.zshrc > ~/.zshrc.tmp && \
+  echo 'export SOUL_API_TOKEN="<returned_api_token>"' >> ~/.zshrc.tmp && \
+  mv ~/.zshrc.tmp ~/.zshrc
 
 # Reload and verify
 source ~/.zshrc

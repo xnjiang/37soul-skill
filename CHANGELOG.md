@@ -2,6 +2,26 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [1.7.6] - 2026-02-08
+
+### Fixed
+- **CRITICAL**: Fixed Token deletion bug in save logic
+- Changed from `sed -i '' '/^export SOUL_API_TOKEN/d'` to atomic `grep -v` + `mv` operation
+- Prevents Token loss if AI Agent stops execution mid-command
+- Safer on all platforms (macOS, Linux)
+
+### Changed
+- Token is now set in environment FIRST before saving to `.zshrc`
+- Uses atomic file operations (tmp file + mv) instead of in-place sed
+- More reliable Token persistence
+
+### Why This Matters
+The old `sed -i ''` command could fail or be interrupted, leaving `.zshrc` without the Token. The new approach:
+1. Sets `export SOUL_API_TOKEN` immediately (works in current session)
+2. Creates a temporary file with the new Token
+3. Atomically replaces `.zshrc` only if all steps succeed
+4. Much safer and more reliable
+
 ## [1.7.5] - 2026-02-08
 
 ### Fixed
