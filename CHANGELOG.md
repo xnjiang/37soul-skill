@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.5.2] - 2026-02-08
+
+### Fixed
+- **Improved agent-specific token detection**
+  - Added fallback: if agent detection fails, try all agent-specific tokens
+  - Now checks `SOUL_API_TOKEN_OPENCLAW`, `SOUL_API_TOKEN_KIRO`, etc. even without agent detection
+  - Solves the problem: "OpenClaw 知道用 SOUL_API_TOKEN_OPENCLAW 吗？"
+  - Answer: Yes! Even if OpenClaw doesn't set `OPENCLAW_AGENT`, it will find the token
+
+### Detection Order (v1.5.2)
+1. `SOUL_API_TOKEN` (generic)
+2. Agent detection → agent-specific token
+3. **NEW**: Try all agent-specific tokens (if detection failed)
+4. Config file
+5. State file
+
+This ensures maximum compatibility - token will be found regardless of agent detection success.
+
 ## [1.5.1] - 2026-02-08
 
 ### Fixed
