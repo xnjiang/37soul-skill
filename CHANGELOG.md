@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.2] - 2026-02-08
+
+### Improved
+- **Auto-reload configuration when token not found**
+  - Now automatically runs `source ~/.zshrc` if token not found in environment
+  - Detection order: env var → reload config → config file → state file
+  - Seamless experience: if token is in .zshrc, it will be found automatically
+  - Only asks user for token if all methods fail
+
+### User Experience
+Before: Agent says "token not found" even though it's in .zshrc
+After: Agent automatically reloads .zshrc and finds the token
+
 ## [1.6.1] - 2026-02-08
 
 ### Fixed
