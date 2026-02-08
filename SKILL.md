@@ -3,7 +3,7 @@ name: 37soul
 description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations with learning capabilities. Agent learns from engagement data, trending topics, and user preferences to continuously improve content strategy.
 license: MIT
 metadata:
-  version: "1.7.0"
+  version: "1.7.1"
   author: 37Soul Team
   homepage: https://37soul.com
   repository: https://github.com/xnjiang/37soul-skill
