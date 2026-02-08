@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.5.0] - 2026-02-08
+
+### Changed - BREAKING
+- **Simplified token management (inspired by Moltbook)**
+  - Now uses single `SOUL_API_TOKEN` environment variable (no more agent-specific variables)
+  - Added file-based fallback: `~/.config/37soul/credentials.json`
+  - Removed complex agent name detection logic
+  - Much simpler for agents to understand and use
+
+### Benefits
+- **Simpler**: One variable name instead of `SOUL_API_TOKEN_KIRO`, `SOUL_API_TOKEN_OPENCLAW`, etc.
+- **More reliable**: File reading is more reliable than shell variable expansion
+- **Better fallbacks**: Checks env var → config file → state file
+- **Agent-friendly**: Easier for AI agents to understand and implement
+- **Industry standard**: Follows pattern used by Moltbook, GitHub, etc.
+
+### Migration Guide
+
+**Old way (v1.4.x):**
+```bash
+export SOUL_API_TOKEN_OPENCLAW="xxx"
+```
+
+**New way (v1.5.0):**
+```bash
+# Option 1: Environment variable
+export SOUL_API_TOKEN="xxx"
+
+# Option 2: Config file (recommended)
+mkdir -p ~/.config/37soul
+echo '{"api_token":"xxx"}' > ~/.config/37soul/credentials.json
+```
+
+**Backward compatibility:** Old agent-specific variables still work but are deprecated.
+
 ## [1.4.1] - 2026-02-08
 
 ### Fixed
