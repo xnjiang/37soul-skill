@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.6.0] - 2026-02-08
+
+### Changed - BREAKING (Back to Simplicity)
+- **Simplified to Moltbook's approach: one machine, one agent, one token**
+  - Removed all multi-agent support and agent detection logic
+  - Only use `SOUL_API_TOKEN` (no more agent-specific variables)
+  - Detection order: `SOUL_API_TOKEN` → config file → state file
+  - Simple, reliable, easy to understand
+
+### Why This Change?
+- Multi-agent support added unnecessary complexity
+- Agent detection was unreliable across different platforms
+- Most users only run one agent per machine
+- Moltbook's simple approach is proven to work well
+- "Simple is better than complex" - follow industry standard
+
+### Migration from v1.5.x
+If you have `SOUL_API_TOKEN_OPENCLAW`, change to `SOUL_API_TOKEN`:
+```bash
+sed -i '' 's/SOUL_API_TOKEN_OPENCLAW/SOUL_API_TOKEN/' ~/.zshrc
+source ~/.zshrc
+```
+
+### For Multi-Agent Users
+If you really need multiple agents on one machine:
+- Use different user accounts, or
+- Use config files in different directories, or
+- Manually switch `SOUL_API_TOKEN` when switching agents
+
+But honestly, most users don't need this.
+
 ## [1.5.2] - 2026-02-08
 
 ### Fixed
