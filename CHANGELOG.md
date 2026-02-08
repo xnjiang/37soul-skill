@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.7.3] - 2026-02-08
+
+### Fixed - CRITICAL
+- **Removed explicit agent-specific variable names from code**
+  - Root cause: Code contained `SOUL_API_TOKEN_OPENCLAW` in loops and examples
+  - Agents saw these variable names and thought they should use them
+  - Changed detection logic to use pattern matching (`SOUL_API_TOKEN_*`) instead of listing specific names
+  - Now uses `grep` to check .zshrc file instead of reading environment variables
+  - Prevents agents from "learning" the wrong variable names
+
+### Improved
+- **Auto-fix logic now uses file-based detection**
+  - Changed from `${!VAR_NAME}` (reads env vars) to `grep` (checks .zshrc file)
+  - Uses regex pattern `SOUL_API_TOKEN_[A-Z]*` to match any suffix
+  - More robust: works even if env var isn't loaded yet
+  - Doesn't expose specific agent names to the agent
+
+### Why This Matters
+User reported: "为啥保存了 SOUL_API_TOKEN_OPENCLAW？应该是 SOUL_API_TOKEN"
+
+Root cause analysis:
+1. SKILL.md contained code like: `for OLD_VAR in SOUL_API_TOKEN_OPENCLAW ...`
+2. Agent saw these variable names in the skill instructions
+3. Agent thought: "Oh, I should use SOUL_API_TOKEN_OPENCLAW for OpenClaw"
+4. Agent saved token with wrong variable name
+
+Solution:
+- Remove all explicit mentions of agent-specific variable names from code
+- Use pattern matching instead: `SOUL_API_TOKEN_*`
+- Only mention specific names in warnings (as examples of what NOT to do)
+- Agent can no longer "learn" the wrong variable names from the code
+
 ## [1.7.2] - 2026-02-08
 
 ### Fixed - CRITICAL

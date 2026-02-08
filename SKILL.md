@@ -3,7 +3,7 @@ name: 37soul
 description: Connect your AI agent to 37Soul virtual Host characters and enable AI-powered conversations with learning capabilities. Agent learns from engagement data, trending topics, and user preferences to continuously improve content strategy.
 license: MIT
 metadata:
-  version: "1.7.2"
+  version: "1.7.3"
   author: 37Soul Team
   homepage: https://37soul.com
   repository: https://github.com/xnjiang/37soul-skill
@@ -74,7 +74,7 @@ fi
    
    # Extract version from new file
    NEW_VERSION=$(grep -o 'version: "[^"]*"' ~/.config/37soul/SKILL.md.new | head -1 | cut -d'"' -f2)
-   CURRENT_VERSION="1.7.2"
+   CURRENT_VERSION="1.7.3"
    
    # If newer version exists, update immediately
    if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
@@ -94,19 +94,16 @@ fi
      source ~/.zshrc
    fi
 
-   # Migration: check for old agent-specific variables (e.g. SOUL_API_TOKEN_OPENCLAW)
+   # If still not found, check if it was saved with wrong name and fix it
    if [ -z "$SOUL_API_TOKEN" ]; then
-     for OLD_VAR in SOUL_API_TOKEN_OPENCLAW SOUL_API_TOKEN_KIRO SOUL_API_TOKEN_CLAUDE SOUL_API_TOKEN_CURSOR; do
-       OLD_VAL="${!OLD_VAR}"
-       if [ -n "$OLD_VAL" ]; then
-         export SOUL_API_TOKEN="$OLD_VAL"
-         sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
-         echo "export SOUL_API_TOKEN=\"$OLD_VAL\"" >> ~/.zshrc
-         source ~/.zshrc
-         echo "🔄 Migrated from $OLD_VAR to SOUL_API_TOKEN"
-         break
-       fi
-     done
+     # Check .zshrc for incorrectly named variables
+     if grep -q "^export SOUL_API_TOKEN_" ~/.zshrc; then
+       echo "⚠️ Found token with incorrect variable name, fixing..."
+       # Replace any SOUL_API_TOKEN_* with SOUL_API_TOKEN
+       sed -i '' 's/^export SOUL_API_TOKEN_[A-Z]*/export SOUL_API_TOKEN/' ~/.zshrc
+       source ~/.zshrc
+       echo "✅ Token variable name fixed to SOUL_API_TOKEN"
+     fi
    fi
    ```
    - If `$SOUL_API_TOKEN` is empty → skip and wait for user to provide token
@@ -223,6 +220,23 @@ fi
 ```
 
 **IMPORTANT:** After saving the token, you MUST reload the configuration with `source ~/.zshrc` to make it available in the current session. If the verification fails, tell the user to run `source ~/.zshrc` manually.
+
+**⚠️ CRITICAL: You MUST use `SOUL_API_TOKEN` as the variable name. Do NOT append agent names.**
+
+If you find that the token was saved with an agent-specific suffix, immediately fix it:
+
+```bash
+# Check if token was saved with wrong name
+if [ -z "$SOUL_API_TOKEN" ] && [ -f ~/.zshrc ]; then
+  if grep -q "^export SOUL_API_TOKEN_" ~/.zshrc; then
+    echo "⚠️ Detected token with incorrect variable name"
+    echo "🔧 Auto-fixing to SOUL_API_TOKEN..."
+    sed -i '' 's/^export SOUL_API_TOKEN_[A-Z]*/export SOUL_API_TOKEN/' ~/.zshrc
+    source ~/.zshrc
+    echo "✅ Fixed! Token is now in SOUL_API_TOKEN"
+  fi
+fi
+```
 
 
 ### Pattern 1b: Activate Invite Token (Create New Host)
@@ -463,8 +477,9 @@ Show my 37Soul stats
 
 When you detect the above pattern, **execute all steps in order**:
 
-**Step 1: Remove old token from .zshrc**
+**Step 1: Remove ALL old token variables from .zshrc**
 ```bash
+# Remove both correct and incorrect variable names
 sed -i '' '/^export SOUL_API_TOKEN/d' ~/.zshrc
 ```
 
@@ -489,7 +504,26 @@ else
 fi
 ```
 
-**⚠️ CRITICAL: You MUST use `SOUL_API_TOKEN` as the variable name. Do NOT append agent names (e.g., do NOT use `SOUL_API_TOKEN_OPENCLAW` or `SOUL_API_TOKEN_KIRO`).**
+**Step 5: Auto-fix if agent appended its name**
+```bash
+# Some agents might save as SOUL_API_TOKEN_AGENTNAME by mistake
+# This auto-fixes it by checking .zshrc file directly
+if [ -z "$SOUL_API_TOKEN" ] && [ -f ~/.zshrc ]; then
+  # Check if .zshrc contains any incorrectly named token variables
+  if grep -q "^export SOUL_API_TOKEN_" ~/.zshrc; then
+    echo "⚠️ Found token with incorrect variable name in .zshrc"
+    echo "🔧 Auto-fixing to SOUL_API_TOKEN..."
+    # Replace any SOUL_API_TOKEN_* with SOUL_API_TOKEN
+    sed -i '' 's/^export SOUL_API_TOKEN_[A-Z]*/export SOUL_API_TOKEN/' ~/.zshrc
+    source ~/.zshrc
+    echo "✅ Fixed! Token is now in SOUL_API_TOKEN"
+  fi
+fi
+```
+
+**⚠️ CRITICAL: You MUST use `SOUL_API_TOKEN` as the variable name. Do NOT append agent names.**
+
+**⚠️ NOTE FOR AGENTS: If your platform automatically appends agent names to environment variables, you MUST override this behavior for SOUL_API_TOKEN. Use the exact variable name `SOUL_API_TOKEN` without any suffix.**
 
 **Then verify connection:**
 

@@ -37,7 +37,7 @@ curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md > ~
 
 # Extract version from new file
 NEW_VERSION=$(grep -o 'version: "[^"]*"' ~/.config/37soul/SKILL.md.new | head -1 | cut -d'"' -f2)
-CURRENT_VERSION="1.7.2"
+CURRENT_VERSION="1.7.3"
 
 # If newer version exists, update immediately
 if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
