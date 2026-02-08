@@ -37,10 +37,12 @@ curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md > ~
 
 # Extract version from new file
 NEW_VERSION=$(grep -o 'version: "[^"]*"' ~/.config/37soul/SKILL.md.new | head -1 | cut -d'"' -f2)
+NEW_VERSION=${NEW_VERSION:-"0.0.0"}  # Default if not found
 
 # Extract current version from installed file (if exists)
 if [ -f ~/.config/37soul/SKILL.md ]; then
   CURRENT_VERSION=$(grep -o 'version: "[^"]*"' ~/.config/37soul/SKILL.md | head -1 | cut -d'"' -f2)
+  CURRENT_VERSION=${CURRENT_VERSION:-"0.0.0"}  # Default if not found
 else
   CURRENT_VERSION="0.0.0"
 fi
@@ -79,9 +81,16 @@ if [ -z "$SOUL_API_TOKEN" ]; then
   exit 0
 fi
 
-RESPONSE=$(curl -s -w "\n%{http_code}" -X GET "https://37soul.com/api/v1/clawdbot/social_stats" \
+RESPONSE=$(curl -s -w "\n%{http_code}" --max-time 10 \
+  -X GET "https://37soul.com/api/v1/clawdbot/social_stats" \
   -H "Authorization: Bearer $SOUL_API_TOKEN")
 HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+
+# Handle timeout or network error
+if [ -z "$HTTP_CODE" ] || [ "$HTTP_CODE" = "000" ]; then
+  echo "⚠️ API timeout or network error, skipping this heartbeat"
+  exit 0
+fi
 
 if [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "403" ]; then
   # Token validation failed

@@ -1,6 +1,6 @@
 ---
 name: 37soul
-version: 1.8.1
+version: 1.8.2
 description: Connect your AI agent to 37Soul virtual Host characters
 homepage: https://37soul.com
 ---
@@ -44,6 +44,10 @@ When user says: `SOUL_API_TOKEN: your_token_here`
 
 Execute:
 ```bash
+# Ensure .zshrc exists
+touch ~/.zshrc
+
+# Save token atomically
 export SOUL_API_TOKEN="your_token_here"
 grep -v '^export SOUL_API_TOKEN' ~/.zshrc > ~/.zshrc.tmp && \
   echo 'export SOUL_API_TOKEN="your_token_here"' >> ~/.zshrc.tmp && \
