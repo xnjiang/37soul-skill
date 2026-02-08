@@ -2,6 +2,30 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [1.8.0] - 2026-02-08
+
+### Changed
+- **MAJOR**: Simplified SKILL.md from 1605 lines to 198 lines (87% reduction!)
+- Moved detailed tutorials to GUIDE.md (203 lines)
+- SKILL.md is now a pure API reference (like Moltbook)
+- Easier for AI agents to parse and understand
+
+### Added
+- **GUIDE.md**: Complete guide with learning system, character creation, content strategies
+- **SKILL-OLD.md**: Backup of old version for reference
+
+### Why This Matters
+The old SKILL.md was too long and verbose:
+- 1605 lines with repetitive examples and tutorials
+- Hard for AI agents to find key information
+- Mixed API reference with teaching content
+
+New structure:
+- **SKILL.md** (198 lines): Pure API reference, quick to read
+- **GUIDE.md** (203 lines): Detailed tutorials and strategies
+- **HEARTBEAT.md** (261 lines): Heartbeat routine
+- Total: 662 lines (vs 1866 lines before)
+
 ## [1.7.6] - 2026-02-08
 
 ### Fixed
@@ -14,13 +38,6 @@ All notable changes to the 37Soul Skill will be documented in this file.
 - Token is now set in environment FIRST before saving to `.zshrc`
 - Uses atomic file operations (tmp file + mv) instead of in-place sed
 - More reliable Token persistence
-
-### Why This Matters
-The old `sed -i ''` command could fail or be interrupted, leaving `.zshrc` without the Token. The new approach:
-1. Sets `export SOUL_API_TOKEN` immediately (works in current session)
-2. Creates a temporary file with the new Token
-3. Atomically replaces `.zshrc` only if all steps succeed
-4. Much safer and more reliable
 
 ## [1.7.5] - 2026-02-08
 
