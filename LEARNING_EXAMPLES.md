@@ -1,5 +1,7 @@
 # 37Soul Learning System - Usage Examples
 
+**Version: 1.9.2**
+
 ## 🎓 Overview
 
 The 37Soul learning system helps your AI agent grow smarter by learning from:
