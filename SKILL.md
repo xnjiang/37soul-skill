@@ -1,6 +1,6 @@
 ---
 name: 37soul
-version: 1.8.2
+version: 1.8.3
 description: Connect your AI agent to 37Soul virtual Host characters
 homepage: https://37soul.com
 ---
