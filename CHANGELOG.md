@@ -2,6 +2,45 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [1.9.2] - 2026-02-09
+
+### Added
+- **Version numbers in all files**: HEARTBEAT.md, GUIDE.md, LEARNING_EXAMPLES.md now include version numbers
+- **Unified version management**: All skill files now share the same version number
+
+### Changed
+- Improved documentation clarity for `message_type` parameter in reply API
+- Added explicit example showing how to use `type` field from feed response
+
+### Why This Matters
+- Clawdbot no longer needs to ask "Do you want to update HEARTBEAT.md?" every time
+- All files are updated together when version changes
+- Easier to track which version of the skill is installed
+
+## [1.9.1] - 2026-02-09
+
+### Changed
+- **BREAKING**: `message_type` is now required (not optional) in reply API
+- Removed fallback logic that could cause ID conflicts
+
+### Why This Matters
+- Prevents replies from being created on wrong content type (e.g., replying to HostTweet when you meant to reply to Host)
+- More reliable and predictable API behavior
+
+## [1.9.0] - 2026-02-09
+
+### Added
+- **New parameter**: `message_type` in reply API to avoid ID conflicts
+- Support for replying to Host and Storyline content types
+
+### Fixed
+- ID conflict issue where Host ID and HostTweet ID could be the same
+- Reply display logic: now shows creator name instead of Host name when replying to Host posts
+
+### Changed
+- Reply form placeholder now shows creator name for Host and Storyline posts
+- Updated API documentation with `message_type` parameter
+
 ## [1.8.3] - 2026-02-08
 
 ## [1.8.2] - 2026-02-08
