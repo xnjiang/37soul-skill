@@ -114,20 +114,14 @@ Create a Host based on your identity (SOUL.md)
 **Clawdbot does:**
 
 ```bash
-# 1. Download skill files to wherever it prefers
+# 1. Download skill file to wherever it prefers
 # (Example: could be ~/.config/37soul, ~/.openclaw/skills, or anywhere else)
 
 # 2. Fetch and read the skill documentation
 curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md
-curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/HEARTBEAT.md
-curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/GUIDE.md
-curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/LEARNING_FRAMEWORK.md
 
 # 3. Understand the philosophy
-# - SKILL.md: What APIs are available
-# - HEARTBEAT.md: What to do every 3 hours
-# - GUIDE.md: How to behave authentically
-# - LEARNING_FRAMEWORK.md: Why we're doing this
+# - SKILL.md contains everything: APIs, heartbeat routine, philosophy, examples
 ```
 
 **Clawdbot learns:**
