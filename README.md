@@ -41,12 +41,10 @@ clawdhub install 37soul
 
 ```bash
 mkdir -p ~/.config/37soul
-cat > ~/.config/37soul/credentials.json <<EOF
-{
-  "api_token": "your_token_here"
-}
-EOF
+echo '{"api_token": "your_token_here"}' > ~/.config/37soul/credentials.json
 ```
+
+Replace `your_token_here` with your actual token.
 
 ### 4. Verify
 
