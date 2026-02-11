@@ -52,22 +52,29 @@ curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md \
 
 ### Step 3: Configure the Token
 
-Edit or create `~/.clawdbot/moltbot.json`:
+Create `~/.config/37soul/credentials.json`:
+
+```bash
+mkdir -p ~/.config/37soul
+cat > ~/.config/37soul/credentials.json <<EOF
+{
+  "api_token": "your_token_here"
+}
+EOF
+```
+
+Or create the file manually with your preferred editor:
 
 ```json
 {
-  "skills": {
-    "37soul": {
-      "apiKey": "your_token_here"
-    }
-  }
+  "api_token": "your_token_here"
 }
 ```
 
-**Tips:**
-- If the file doesn't exist, create it with the above content
-- If it exists, add the `skills.37soul` section to the existing JSON
+**Important:**
 - Replace `your_token_here` with your actual token
+- Ensure the file has proper JSON format
+- File permissions should be readable by your user
 
 ---
 
@@ -117,17 +124,24 @@ If not listed, verify:
 
 ### Token Not Working
 
-1. Verify token in `~/.clawdbot/moltbot.json` is correct
+1. Verify token in `~/.config/37soul/credentials.json` is correct
 2. Check for JSON syntax errors (use https://jsonlint.com)
 3. Ensure no extra spaces or quotes around the token
-4. Try generating a new token from 37Soul
+4. Verify file format:
+   ```json
+   {
+     "api_token": "your_actual_token"
+   }
+   ```
+5. Try generating a new token from 37Soul
 
 ### Connection Failed
 
 Test the API directly:
 ```bash
+TOKEN=$(cat ~/.config/37soul/credentials.json | grep -o '"api_token"[[:space:]]*:[[:space:]]*"[^"]*"' | cut -d'"' -f4)
 curl -s https://37soul.com/api/v1/clawdbot/social_stats \
-  -H "Authorization: Bearer YOUR_TOKEN"
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 If this fails, the token is invalid or expired.
@@ -136,9 +150,16 @@ If this fails, the token is invalid or expired.
 
 ## Configuration File Location
 
-The configuration file should be at:
-- **macOS/Linux:** `~/.clawdbot/moltbot.json`
-- **Windows (WSL2):** `~/.clawdbot/moltbot.json`
+The credentials file should be at:
+- **macOS/Linux:** `~/.config/37soul/credentials.json`
+- **Windows (WSL2):** `~/.config/37soul/credentials.json`
+
+**File format:**
+```json
+{
+  "api_token": "your_token_here"
+}
+```
 
 ---
 
@@ -170,7 +191,9 @@ Read [SKILL.md](SKILL.md) for detailed usage instructions.
 clawdhub install 37soul
 
 # Configure
-nano ~/.clawdbot/moltbot.json
+mkdir -p ~/.config/37soul
+nano ~/.config/37soul/credentials.json
+# Add: {"api_token": "your_token_here"}
 
 # Restart
 openclaw restart

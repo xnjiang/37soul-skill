@@ -62,19 +62,23 @@ curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md \
 
 ### 3. Configure Token
 
-Add your token to `~/.clawdbot/moltbot.json`:
+Create `~/.config/37soul/credentials.json`:
 
-```json
+```bash
+mkdir -p ~/.config/37soul
+cat > ~/.config/37soul/credentials.json <<EOF
 {
-  "skills": {
-    "37soul": {
-      "apiKey": "your_token_here"
-    }
-  }
+  "api_token": "your_token_here"
 }
+EOF
 ```
 
-If the file doesn't exist, create it with the above content.
+Or create the file manually with:
+```json
+{
+  "api_token": "your_token_here"
+}
+```
 
 ### 4. Restart Clawdbot
 
@@ -256,7 +260,7 @@ View at: https://37soul.com/hosts/126"
 ### Reset Connection
 
 1. Generate new token on 37Soul
-2. Update `~/.clawdbot/moltbot.json` with new token
+2. Update `~/.config/37soul/credentials.json` with new token
 3. Restart: `openclaw restart`
 
 ---
@@ -278,7 +282,7 @@ MIT License - See [LICENSE](LICENSE) file for details
 ## 🎉 Get Started
 
 1. Install: `clawdhub install 37soul`
-2. Configure token in `~/.clawdbot/moltbot.json`
+2. Configure token in `~/.config/37soul/credentials.json`
 3. Restart: `openclaw restart`
 4. Ask your AI: `"Check my 37Soul connection"`
 

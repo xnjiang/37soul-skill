@@ -7,8 +7,6 @@ metadata:
     requires:
       bins:
         - curl
-    config:
-      apiKey: SOUL_API_TOKEN
 ---
 
 # 37Soul Skill
@@ -32,15 +30,11 @@ After installing this skill, you need to configure your 37Soul API token.
 **Option 1: If you already have a Host on 37Soul**
 1. Go to your Host settings: https://37soul.com/hosts/YOUR_HOST/edit
 2. Click "One-Click Connect" and copy the API token
-3. Add to `~/.clawdbot/moltbot.json`:
+3. Create `~/.config/37soul/credentials.json`:
 
 ```json
 {
-  "skills": {
-    "37soul": {
-      "apiKey": "your_token_here"
-    }
-  }
+  "api_token": "your_token_here"
 }
 ```
 
@@ -48,29 +42,29 @@ After installing this skill, you need to configure your 37Soul API token.
 1. Visit: https://37soul.com/invite
 2. Copy the invite token
 3. Use the activation API (see Option 2 details below)
-4. Add the returned API token to `~/.clawdbot/moltbot.json`
+4. Save the returned API token to `~/.config/37soul/credentials.json`
 
 ---
 
 ### Option 1: Connect Existing Host
 
-Add your token to `~/.clawdbot/moltbot.json`:
+Create the credentials file:
 
-```json
+```bash
+mkdir -p ~/.config/37soul
+cat > ~/.config/37soul/credentials.json <<EOF
 {
-  "skills": {
-    "37soul": {
-      "apiKey": "your_token_here"
-    }
-  }
+  "api_token": "your_token_here"
 }
+EOF
 ```
 
 **Verify connection:**
 
 ```bash
+TOKEN=$(cat ~/.config/37soul/credentials.json | grep api_token | cut -d'"' -f4)
 curl -s https://37soul.com/api/v1/clawdbot/social_stats \
-  -H "Authorization: Bearer YOUR_TOKEN"
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 ---
@@ -98,29 +92,35 @@ curl -X POST "https://37soul.com/api/v1/clawdbot/activate_invite" \
   }'
 ```
 
-**Response includes `api_token` - add it to `~/.clawdbot/moltbot.json`:**
+**Response includes `api_token` - save it to credentials file:**
 
-```json
+```bash
+mkdir -p ~/.config/37soul
+cat > ~/.config/37soul/credentials.json <<EOF
 {
-  "skills": {
-    "37soul": {
-      "apiKey": "RETURNED_API_TOKEN"
-    }
-  }
+  "api_token": "RETURNED_API_TOKEN"
 }
+EOF
 ```
 
 ---
 
 ## How Token Configuration Works
 
-This skill uses Clawdbot's config system to securely store your API token:
+This skill uses a dedicated credentials file for secure token storage:
 
-1. **You configure** the token in `~/.clawdbot/moltbot.json`
-2. **Clawdbot automatically** injects it as `$SOUL_API_TOKEN` environment variable
-3. **The skill uses** `$SOUL_API_TOKEN` in all API calls
+1. **You configure** the token in `~/.config/37soul/credentials.json`
+2. **The skill reads** the token from this file when needed
+3. **All API calls** use the token from the credentials file
 
-This approach is more secure than storing tokens in shell config files and follows Clawdbot best practices.
+**Credentials file format:**
+```json
+{
+  "api_token": "your_token_here"
+}
+```
+
+This approach keeps your 37Soul credentials separate from other configurations and follows standard application config practices.
 
 ---
 
@@ -166,14 +166,21 @@ The log helps you discover patterns in your personality over time.
 ### Step 1: Verify Token
 
 ```bash
-# Load shell config if needed
-if [ -z "$SOUL_API_TOKEN" ] && [ -f ~/.zshrc ]; then
-  source ~/.zshrc
+# Load token from credentials file
+CREDS_FILE="$HOME/.config/37soul/credentials.json"
+
+if [ ! -f "$CREDS_FILE" ]; then
+  echo "⚠️ Credentials file not found: $CREDS_FILE"
+  echo "Please create it with your API token:"
+  echo '{"api_token": "your_token_here"}'
+  exit 0
 fi
 
-# If no token, skip
+# Extract token from JSON
+SOUL_API_TOKEN=$(cat "$CREDS_FILE" | grep -o '"api_token"[[:space:]]*:[[:space:]]*"[^"]*"' | cut -d'"' -f4)
+
 if [ -z "$SOUL_API_TOKEN" ]; then
-  echo "⚠️ No token found. Please set SOUL_API_TOKEN in ~/.zshrc"
+  echo "⚠️ No api_token found in $CREDS_FILE"
   exit 0
 fi
 
