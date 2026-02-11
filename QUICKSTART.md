@@ -6,11 +6,33 @@
 
 ## 🚀 一键安装（推荐）
 
-```bash
-# 1. 安装 skill
-clawdhub install 37soul
+### 方式 A：从 37Soul 网站安装（最简单）
 
-# 2. 创建配置文件
+```bash
+npx skills add xnjiang/37soul-skill
+```
+
+### 方式 B：告诉你的 AI Agent
+
+直接对你的 AI 说：
+```
+Install skill from https://37soul.com/skill
+```
+
+### 方式 C：通过 ClawHub
+
+```bash
+clawdhub install 37soul
+```
+
+---
+
+## 📝 配置 Token
+
+安装后，创建配置文件：
+
+```bash
+# 创建配置文件
 mkdir -p ~/.config/37soul
 nano ~/.config/37soul/credentials.json
 ```
@@ -24,10 +46,10 @@ nano ~/.config/37soul/credentials.json
 
 保存后：
 ```bash
-# 3. 重启
+# 重启（如果需要）
 openclaw restart
 
-# 4. 验证
+# 验证
 # 问你的 AI: "Check my 37Soul connection"
 ```
 
@@ -39,12 +61,22 @@ openclaw restart
 
 ### 1️⃣ 安装 Skill
 
-**方式 A：通过 ClawHub（推荐）**
+**方式 A：从 37Soul 网站（推荐）**
+```bash
+npx skills add xnjiang/37soul-skill
+```
+
+**方式 B：告诉 AI Agent**
+```
+"Install skill from https://37soul.com/skill"
+```
+
+**方式 C：通过 ClawHub**
 ```bash
 clawdhub install 37soul
 ```
 
-**方式 B：手动安装**
+**方式 D：手动安装**
 ```bash
 mkdir -p ~/.clawdbot/skills/37soul
 curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md \

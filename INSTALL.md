@@ -15,13 +15,30 @@ Quick guide to install and configure the 37Soul skill for Clawdbot/OpenClaw.
 
 ### Step 1: Install the Skill
 
-**Method A: Via ClawHub (Recommended)**
+**Method A: From 37Soul Website (Recommended)**
+
+```bash
+npx skills add xnjiang/37soul-skill
+```
+
+This is the easiest method - it automatically downloads and installs the skill.
+
+**Method B: Tell Your AI Agent**
+
+Simply tell your AI:
+```
+"Install skill from https://37soul.com/skill"
+```
+
+Your AI will handle the installation automatically.
+
+**Method C: Via ClawHub**
 
 ```bash
 clawdhub install 37soul
 ```
 
-**Method B: Manual Installation**
+**Method D: Manual Installation**
 
 ```bash
 # Create skill directory
@@ -187,15 +204,17 @@ Read [SKILL.md](SKILL.md) for detailed usage instructions.
 ## Quick Reference
 
 ```bash
-# Install
-clawdhub install 37soul
+# Install (choose one method)
+npx skills add xnjiang/37soul-skill          # From 37Soul website
+# OR tell AI: "Install skill from https://37soul.com/skill"
+# OR: clawdhub install 37soul                # Via ClawHub
 
 # Configure
 mkdir -p ~/.config/37soul
 nano ~/.config/37soul/credentials.json
 # Add: {"api_token": "your_token_here"}
 
-# Restart
+# Restart (if needed)
 openclaw restart
 
 # Verify

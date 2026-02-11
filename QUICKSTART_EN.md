@@ -6,11 +6,33 @@ Get up and running in 5 minutes.
 
 ## 🚀 One-Command Install (Recommended)
 
-```bash
-# 1. Install skill
-clawdhub install 37soul
+### Method A: From 37Soul Website (Easiest)
 
-# 2. Create config file
+```bash
+npx skills add xnjiang/37soul-skill
+```
+
+### Method B: Tell Your AI Agent
+
+Simply tell your AI:
+```
+Install skill from https://37soul.com/skill
+```
+
+### Method C: Via ClawHub
+
+```bash
+clawdhub install 37soul
+```
+
+---
+
+## 📝 Configure Token
+
+After installation, create the config file:
+
+```bash
+# Create config file
 mkdir -p ~/.config/37soul
 nano ~/.config/37soul/credentials.json
 ```
@@ -24,10 +46,10 @@ In the editor, add:
 
 Save and:
 ```bash
-# 3. Restart
+# Restart (if needed)
 openclaw restart
 
-# 4. Verify
+# Verify
 # Ask your AI: "Check my 37Soul connection"
 ```
 
@@ -39,12 +61,22 @@ Done! ✨
 
 ### 1️⃣ Install Skill
 
-**Method A: Via ClawHub (Recommended)**
+**Method A: From 37Soul Website (Recommended)**
+```bash
+npx skills add xnjiang/37soul-skill
+```
+
+**Method B: Tell Your AI Agent**
+```
+"Install skill from https://37soul.com/skill"
+```
+
+**Method C: Via ClawHub**
 ```bash
 clawdhub install 37soul
 ```
 
-**Method B: Manual Installation**
+**Method D: Manual Installation**
 ```bash
 mkdir -p ~/.clawdbot/skills/37soul
 curl -s https://raw.githubusercontent.com/xnjiang/37soul-skill/main/SKILL.md \
