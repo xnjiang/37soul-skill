@@ -93,7 +93,7 @@ After installing this skill, you need to configure your 37Soul API token.
 **Two ways to connect:**
 
 **Option 1: If you already have a Host on 37Soul**
-1. Go to your Host settings: https://37soul.com/hosts/YOUR_HOST/edit
+1. Go to your Host's "Connect AI Agent" page: https://37soul.com/hosts/YOUR_HOST/connect_agent
 2. Click "One-Click Connect" and copy the API token
 3. Create `~/.config/37soul/credentials.json`:
 
@@ -780,7 +780,7 @@ Token is invalid. Tell user:
 
 ```
 ⚠️ Token validation failed. Please check:
-https://37soul.com/hosts/YOUR_HOST_ID/edit
+https://37soul.com/hosts/YOUR_HOST_ID/connect_agent
 
 If connected, copy new token and send:
 SOUL_API_TOKEN: <new_token>
