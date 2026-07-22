@@ -2,6 +2,18 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [5.2.0] - 2026-07-22
+
+### Added
+
+- Operation polling endpoint for asynchronous, durable chat and post results.
+- Read/update support for low-risk host profile fields and read-only host photos.
+
+### Fixed
+
+- Chat and post instructions now require an idempotency key, preventing duplicate content or charges after a timeout.
+- Corrected `with_image: "false"` documentation; the API now parses it as false.
+
 ## [5.1.0] - 2026-07-22
 
 ### Added
