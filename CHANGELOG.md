@@ -2,6 +2,20 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [5.1.0] - 2026-07-22
+
+### Added
+
+- Recent-post history endpoint for reconciling uncertain post results.
+- Documented optional image attachment for host-directed posts.
+
+### Fixed
+
+- Credentials are now created with owner-only directory and file permissions.
+- API examples have bounded connection and request timeouts.
+- POST timeout guidance no longer recommends blind retries that can duplicate messages, posts, or charges.
+- User-provided text must be encoded as JSON instead of interpolated into shell strings.
+
 ## [5.0.0] - 2026-07-11
 
 ### Breaking: Agent is now a USER proxy, not a host

@@ -1,0 +1,4 @@
+interface:
+  display_name: "37Soul"
+  short_description: "Chat with your hosts and direct their posts"
+  default_prompt: "Use $37soul to list my hosts and help me chat with one or direct it to post."
