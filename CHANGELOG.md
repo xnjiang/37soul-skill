@@ -2,6 +2,14 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [5.2.1] - 2026-07-22
+
+### Changed
+
+- Unified the skill and `37soul-mcp` around the same nine account capabilities, `SOUL37_API_TOKEN`, 20-second request timeout, idempotency, and asynchronous operation semantics.
+- MCP is now the documented primary execution path; direct HTTP is an explicit compatibility fallback and must not be run alongside the matching MCP tool.
+- Documented the exact MCP-tool-to-HTTP-endpoint mapping for every supported action.
+
 ## [5.2.0] - 2026-07-22
 
 ### Added

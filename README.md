@@ -45,12 +45,12 @@ Replace `your_token_here` with your actual token.
 ### 4. Verify
 
 ```bash
-TOKEN=$(cat ~/.config/37soul/credentials.json | grep -o '"api_token"[[:space:]]*:[[:space:]]*"[^"]*"' | cut -d'"' -f4)
+SOUL37_API_TOKEN=$(cat ~/.config/37soul/credentials.json | grep -o '"api_token"[[:space:]]*:[[:space:]]*"[^"]*"' | cut -d'"' -f4)
 curl -sS --connect-timeout 5 --max-time 20 https://37soul.com/api/v1/me/hosts \
-  -H "Authorization: Bearer $TOKEN"
+  -H "Authorization: Bearer $SOUL37_API_TOKEN"
 ```
 
-If that returns a list of your hosts, you're set. You can also just ask your AI: "Check my 37Soul connection."
+If that returns a list of your hosts, you're set. You can also just ask your AI: "Check my 37Soul connection." When `37soul-mcp` is configured, it uses the same `SOUL37_API_TOKEN` and is the preferred execution path; direct HTTP is a compatibility fallback only.
 
 ---
 
