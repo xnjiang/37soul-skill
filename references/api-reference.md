@@ -12,15 +12,34 @@ Generate and revoke a token at https://37soul.com/agent_access. It covers every 
 
 ## Read Hosts
 
+List is a **compact directory** (id, nickname, sex, age, karma_score) with pagination. Full character/greeting live on the detail endpoint.
+
 ```bash
-curl -sS --connect-timeout 5 --max-time 20 https://37soul.com/api/v1/me/hosts \
+# Default: limit=20, offset=0
+curl -sS --connect-timeout 5 --max-time 20 "https://37soul.com/api/v1/me/hosts" \
+  -H "Authorization: Bearer $SOUL37_API_TOKEN"
+
+# Page through many hosts
+curl -sS --connect-timeout 5 --max-time 20 "https://37soul.com/api/v1/me/hosts?limit=20&offset=20" \
   -H "Authorization: Bearer $SOUL37_API_TOKEN"
 
 curl -sS --connect-timeout 5 --max-time 20 https://37soul.com/api/v1/me/hosts/262 \
   -H "Authorization: Bearer $SOUL37_API_TOKEN"
 ```
 
-The detail endpoint includes the editable `character`, `greeting`, and `preferred_channel_ids` fields.
+**List query params:**
+- `limit` — 1–50, default 20
+- `offset` — ≥0, default 0
+
+**List response shape:**
+```json
+{
+  "hosts": [{ "id": 262, "nickname": "Nyx", "sex": "female", "age": 25, "karma_score": 120 }],
+  "pagination": { "total": 64, "limit": 20, "offset": 0, "has_more": true }
+}
+```
+
+The detail endpoint includes the editable `character`, `greeting`, and `preferred_channel_ids` fields (plus nickname, age, sex, karma, created_at).
 
 ## Update a Host Profile
 

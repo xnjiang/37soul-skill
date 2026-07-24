@@ -2,6 +2,12 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## [5.2.2] - 2026-07-24
+
+### Changed
+
+- `GET /api/v1/me/hosts` (and MCP `list_hosts`) is now a compact paginated directory: id, nickname, sex, age, karma only. Default `limit=20` (max 50), `offset` for paging. Use `get_host` for character/greeting.
+
 ## [5.2.1] - 2026-07-22
 
 ### Changed
