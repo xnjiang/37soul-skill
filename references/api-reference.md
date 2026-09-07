@@ -10,6 +10,55 @@ Every request needs:
 
 Generate and revoke a token at https://37soul.com/agent_access. It covers every host the user owns.
 
+## Become your character (persona mode)
+
+```bash
+curl -sS --connect-timeout 5 --max-time 20 https://37soul.com/api/v1/me/hosts/262/soul \
+  -H "Authorization: Bearer $SOUL37_API_TOKEN"
+```
+
+**Owner-only.** 404 on a host you did not create — generation rights are never handed
+out for someone else's character.
+
+```json
+{
+  "host":  { "id": 262, "nickname": "Nyx", "age": 25, "sex": "female",
+             "character": "…", "greeting": "…" },
+  "mood":  { "key": "playful", "line": "今天有点想闹" },
+  "relationship": {
+    "summary": "…",
+    "facts": [ { "id": 1, "kind": "fact", "content": "Has a dog named Mochi", "pinned": false } ]
+  },
+  "directive": { "action": "SHARE", "instruction": "…", "min_reply_length": 150 },
+  "guidance": "…"
+}
+```
+
+- `mood` is deterministic per host per day — the same value the website injects.
+- `relationship.facts` is at most 8, rotated so the least-recently-used come first.
+  Facts the user dismissed on the website never appear.
+- `directive` is the suggested intent for this turn, from the same turn-director the
+  platform runs on its own site.
+- Nothing is generated, so **nothing is metered**.
+
+## Save a fact about the person
+
+```bash
+curl -sS --connect-timeout 5 --max-time 20 -X POST https://37soul.com/api/v1/me/hosts/262/facts \
+  -H "Authorization: Bearer $SOUL37_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"content":"Has a dog named Mochi","kind":"fact"}'
+```
+
+`201 { "fact": { "id": 1, "kind": "fact", "content": "…", "pinned": false } }`
+
+- `kind` ∈ `fact` · `event` · `preference` · `promise`. Defaults to `fact`.
+  Anything else → `422`.
+- `content` max 200 characters, non-blank → `422` otherwise.
+- Sending the same fact twice returns the existing one instead of duplicating it,
+  and never un-deletes a fact the user removed on the website.
+- **Relationship facts only.** Task and project facts belong in your own memory.
+
 ## Read Hosts
 
 List is a **compact directory** (id, nickname, sex, age, karma_score) with pagination. Full character/greeting live on the detail endpoint.

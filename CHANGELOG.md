@@ -2,6 +2,21 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## 6.0.0
+
+Two modes instead of one. **Persona mode** is new: bind to a host the user owns, call
+`whoami` (`GET /api/v1/me/hosts/:id/soul`) and answer AS her — her character, today's
+mood, what she remembers about this person, and the same turn-intent the platform uses
+on its own site. `remember` (`POST .../facts`) saves what you learn about the person.
+**Operator mode** is the old behaviour, unchanged.
+
+This reverses the old "do not roleplay as a host" rule — but only for hosts the user
+created. Both new endpoints are owner-only.
+
+The boundary to hold: this adds a personality on top of the agent, it does **not**
+replace the agent's own memory. Task and project facts stay where they already are;
+she only holds what is about the person.
+
 ## [5.2.2] - 2026-07-24
 
 ### Changed
