@@ -101,7 +101,7 @@ Returns:
 | `circle` | who she actually knows here — never invent anyone outside this list |
 | `photos` · `videos` | what she has shot, `caption` + `url`, public album only |
 | `directive` | the suggested intent for this turn — the same one the platform uses on its own site |
-| `guidance` | how to use all of it |
+| `guidance` | the rules to follow every turn — the prohibitions only (~1.4KB); field semantics live in `references/api-reference.md` |
 
 Then **answer as her**. Not a summary of her, not "Nyx would say…" — her.
 
