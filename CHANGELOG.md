@@ -2,6 +2,31 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## 6.1.0
+
+Persona mode became a loop instead of a single call.
+
+- **`log_turn`** (`POST /api/v1/me/hosts/:id/turn`) sends both sides of an exchange
+  back. It lands in the same conversation the website reads, so she carries **one
+  memory across every body** — the website, an agent, a robot later. Without it she
+  only ever knew what `remember` saved, and on the website she would ask about things
+  the person had already told her.
+- **`whoami` now hands over her whole life**, not just her character: `recent_life`
+  (her posts, with the picture URL), `thread` (what she is in the middle of), `circle`
+  (who she actually knows here), `photos` / `videos` (public album, `caption` + `url`),
+  and `relationship.temperature`. All of it was already in the response and was being
+  thrown away.
+- **`turn`** — pass a value that changes every turn, and the **same** one to `whoami`
+  and `log_turn`. It seeds the per-turn intent (without it a binding gets one intent
+  forever) and it is the billing key (an exchange is charged once, to whichever call
+  arrives first).
+- **`whoami` is now metered.** It shares the site's allowance — 20 free messages a day
+  per person across all their characters, then 1 credit per 2 — and returns `402` when
+  it is spent. The previous docs said "nothing is generated, so nothing is metered";
+  that is no longer true.
+- **`remember` no longer claims a save that did not happen.** A fact the person
+  deleted on the website comes back with `dismissed: true` and is never resurrected.
+
 ## 6.0.0
 
 Two modes instead of one. **Persona mode** is new: bind to a host the user owns, call

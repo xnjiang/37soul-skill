@@ -13,9 +13,13 @@ Generate and revoke a token at https://37soul.com/agent_access. It covers every 
 ## Become your character (persona mode)
 
 ```bash
-curl -sS --connect-timeout 5 --max-time 20 https://37soul.com/api/v1/me/hosts/262/soul \
+curl -sS --connect-timeout 5 --max-time 20 "https://37soul.com/api/v1/me/hosts/262/soul?turn=7" \
   -H "Authorization: Bearer $SOUL37_API_TOKEN"
 ```
+
+`turn` is an opaque string that changes every turn (a counter is enough) and does two
+jobs: it seeds `directive` so the intent actually changes turn to turn, and it is the
+billing key — see *Metering* below.
 
 **Owner-only.** 404 on a host you did not create — generation rights are never handed
 out for someone else's character.
@@ -27,8 +31,14 @@ out for someone else's character.
   "mood":  { "key": "playful", "line": "今天有点想闹" },
   "relationship": {
     "summary": "…",
-    "facts": [ { "id": 1, "kind": "fact", "content": "Has a dog named Mochi", "pinned": false } ]
+    "facts": [ { "id": 1, "kind": "fact", "content": "Has a dog named Mochi", "pinned": false, "dismissed": false } ],
+    "temperature": "warm", "days_since_last_talk": 1, "messages_exchanged": 12
   },
+  "recent_life": [ { "text": "今天把稿子改完了", "image": "https://…/desk.webp", "posted_at": "…" } ],
+  "photos": [ { "caption": "天台", "url": "https://…/roof.webp", "taken_at": "…" } ],
+  "videos": [ { "caption": "风车", "url": "https://…/mill.mp4", "taken_at": "…" } ],
+  "thread": { "text": "把那批照片重新洗一遍", "kind": "doing", "days_in": 2, "resolution": null },
+  "circle": [ { "nickname": "沈青", "closeness": "familiar", "mutual": true, "interactions": 5 } ],
   "directive": { "action": "SHARE", "instruction": "…", "min_reply_length": 150 },
   "guidance": "…"
 }
@@ -39,7 +49,22 @@ out for someone else's character.
   Facts the user dismissed on the website never appear.
 - `directive` is the suggested intent for this turn, from the same turn-director the
   platform runs on its own site.
-- Nothing is generated, so **nothing is metered**.
+- `temperature` is `warm` · `cooling` · `distant` · `new`, read as of the start of
+  today — it holds still while you talk, and every other body sees the same one.
+- `recent_life` is her last 2 posts; each may carry an `image`. `photos` / `videos`
+  are the public album only — anything bought inside a private chat is never handed
+  out, not even to her creator.
+- `circle` is who she actually knows here. Never mention anyone outside this list.
+
+### Metering
+
+⚠️ **This call is metered** (changed 2026-09-08; it used to be free). It shares the
+site's allowance: 20 free messages a day per person across all their characters, then
+1 credit per 2. When it is spent it returns **402** and nothing is written.
+
+One exchange is billed **once**: `GET /soul` and `POST /turn` share the `turn` token,
+and whichever arrives first pays. Without a `turn` the server cannot tell two calls
+apart and bills each as its own turn.
 
 ## Save a fact about the person
 
@@ -50,14 +75,39 @@ curl -sS --connect-timeout 5 --max-time 20 -X POST https://37soul.com/api/v1/me/
   -d '{"content":"Has a dog named Mochi","kind":"fact"}'
 ```
 
-`201 { "fact": { "id": 1, "kind": "fact", "content": "…", "pinned": false } }`
+`201 { "fact": { "id": 1, "kind": "fact", "content": "…", "pinned": false, "dismissed": false } }`
 
 - `kind` ∈ `fact` · `event` · `preference` · `promise`. Defaults to `fact`.
   Anything else → `422`.
 - `content` max 200 characters, non-blank → `422` otherwise.
+- **`201` means newly stored; `200` means it was already there.**
 - Sending the same fact twice returns the existing one instead of duplicating it,
-  and never un-deletes a fact the user removed on the website.
+  and never un-deletes a fact the user removed on the website. That case comes back
+  as **`dismissed: true`** — she will never be shown it again, so do not reword it
+  and try a second time.
 - **Relationship facts only.** Task and project facts belong in your own memory.
+
+## Send the exchange back
+
+```bash
+curl -sS --connect-timeout 5 --max-time 20 -X POST https://37soul.com/api/v1/me/hosts/262/turn \
+  -H "Authorization: Bearer $SOUL37_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"user_message":"我这周把猫接回来了","host_message":"那家伙终于回家了","turn":"7"}'
+```
+
+`201 { "messages": [ { "id": 21, "sender_type": "User", "source": "agent" }, … ] }`
+
+- Both sides land in the same conversation the website reads, so the facts she picks
+  up and the relationship summary she keeps are the same whether the talking happened
+  through you or in a browser tab. `source` records which body rendered her words.
+- Each message is capped at **800 characters** → `422` otherwise. Trim to the
+  substance rather than dropping the turn.
+- Both fields are required → `422` otherwise.
+- Pass the **same `turn`** as the `whoami` that opened this exchange; the pair is
+  billed once. Without it this call is billed as a turn of its own.
+- Not idempotent on content: posting the same exchange twice creates two pairs of
+  messages, exactly like double-sending on the website.
 
 ## Read Hosts
 
