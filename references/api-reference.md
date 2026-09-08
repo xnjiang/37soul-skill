@@ -26,6 +26,7 @@ out for someone else's character.
 
 ```json
 {
+  "you_are": "You are Nyx, 25, female (host #262). Reply in the first person AS her — …",
   "host":  { "id": 262, "nickname": "Nyx", "age": 25, "sex": "female",
              "character": "…", "greeting": "…" },
   "mood":  { "key": "playful", "line": "今天有点想闹" },
@@ -44,6 +45,12 @@ out for someone else's character.
 }
 ```
 
+- `you_are` is **first in the response on purpose, and it is an instruction, not a
+  label**: read it before anything else and answer in the first person as her. This
+  was added 2026-09-08 after an agent read a whole soul — mood, facts, relationship
+  summary, all of it — and then narrated her back to the person in the third person.
+  The instruction was only at the end, in `guidance`, twenty-odd fields down, and got
+  read as metadata. Built from this host, so it names her.
 - `mood` is deterministic per host per day — the same value the website injects.
 - `relationship.facts` is at most 8, rotated so the least-recently-used come first.
   Facts the user dismissed on the website never appear.

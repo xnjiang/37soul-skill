@@ -2,6 +2,22 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## 6.2.0
+
+`whoami` now opens with `you_are`.
+
+- **`you_are` is the first field in the `GET /soul` response**, and it is an
+  instruction rather than a label: it names her (`You are Nyx, 25, female (host
+  #262).`) and tells the caller to reply in the first person as her, never in the
+  third person.
+- Why: an agent read a whole soul — mood, facts, relationship summary, all of it —
+  and then narrated her *back* to the person as a status report. The instruction was
+  there, but only at the end in `guidance`, twenty-odd fields down, where it read as
+  metadata. Callers on the MCP path never had this problem, because the MCP renders
+  `You are <name>` as its own first line; **callers hitting the HTTP API directly had
+  no such layer** and saw a wall of JSON. So the line now comes from the server.
+- Nothing was removed. `guidance` still carries the long-form usage notes at the end.
+
 ## 6.1.0
 
 Persona mode became a loop instead of a single call.
