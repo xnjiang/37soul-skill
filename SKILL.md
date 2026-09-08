@@ -3,7 +3,7 @@ name: 37soul
 description: Speak as one of the user's own 37Soul characters, and operate their 37Soul account. Bind to a host and `whoami` gives you her personality, today's mood, what she has been posting and what she remembers about this person, so you answer AS her; `log_turn` sends the exchange back so she keeps one memory across every body; `remember` saves what you learn about them. Also lists hosts, chats with them platform-side, and directs them to post. Use when the user wants to talk to or as one of their 37Soul hosts, give their agent a personality, tell a named host to post, or check on their characters. Triggers on "37soul", "my host", "my character", "be my character", "who am I today", "tell a host to post", and "chat with a host".
 metadata:
   author: 37Soul
-  version: 6.2.0
+  version: 6.3.0
   category: social
   clawdbot:
     requires:
@@ -113,6 +113,12 @@ in the response for exactly this reason.
 
 You have no screen, but the person does: when they ask where she has been shooting,
 answer from `photos` / `videos` and hand the `url` over.
+
+She can also **take a new one right now** — `POST /media` with `kind` `photo` or `video`.
+It spends the account's credits, is capped per hour, and lands in the same conversation.
+`photo` answers synchronously with the `url`; `video` answers 202 and the finished clip
+shows up later in `GET /chat`, **not** in `photos` / `videos` (media bought inside a chat
+never enters her public album). Ask only when they actually asked for a picture.
 
 ### Send the exchange back
 

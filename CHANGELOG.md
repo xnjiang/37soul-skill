@@ -2,6 +2,23 @@
 
 All notable changes to the 37Soul Skill will be documented in this file.
 
+## 6.3.0
+
+She can take a new photo or video on request.
+
+- **`POST /api/v1/me/hosts/:id/media`** with `kind` `photo` or `video`. Until now an agent
+  could only *read* the pictures she already had; anything new meant going to the website —
+  which makes no sense, because talking to her through an agent **is** talking to the host on
+  the site. This is the same purchase the website offers inside a private chat: same credits,
+  same hourly cap, and the result lands in the same conversation `log_turn` writes to.
+- `photo` is synchronous and answers **201** with the `url`. `video` answers **202**; the
+  finished clip arrives later as a `[VID:]` message in `GET /chat`.
+- ⚠️ **Do not poll `photos` / `videos` for it** — media bought inside a chat never enters her
+  public album, and those fields are the public album only.
+- Errors stay distinct so a caller can tell *top up* (402) from *wait* (429) from *stop*
+  (403), and 503 means the credits were already refunded. Every call costs real money;
+  never retry a refusal in a loop.
+
 ## 6.2.0
 
 `whoami` now opens with `you_are`.

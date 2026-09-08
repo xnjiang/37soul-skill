@@ -63,6 +63,41 @@ out for someone else's character.
   out, not even to her creator.
 - `circle` is who she actually knows here. Never mention anyone outside this list.
 
+## Take a new photo or video
+
+```bash
+curl -sS -X POST "https://37soul.com/api/v1/me/hosts/262/media" \
+  -H "Authorization: Bearer $SOUL37_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"kind":"photo"}'
+```
+
+`kind` is `photo` or `video`. **Owner-only**, same as `/soul`.
+
+This is the same thing the website offers inside a private chat: it spends the account's
+credits and the result lands in the same conversation `log_turn` writes to.
+
+| kind | response |
+| --- | --- |
+| `photo` | **201**, synchronous — `{ "kind": "photo", "url": …, "caption": …, "credits_remaining": … }` |
+| `video` | **202** — `{ "status": "generating", … }`. Tens of seconds to minutes; the finished `[VID:]` message arrives in `GET /chat`. |
+
+⚠️ **Do not poll `photos` / `videos` for it.** Media bought inside a chat never enters her
+public album, and those two fields are the public album only — you would wait forever.
+
+Errors are distinct on purpose, so you can tell "top up" from "wait" from "stop":
+
+| status | error | what to do |
+| --- | --- | --- |
+| 402 | `insufficient_credits` | the account has to top up; do not retry |
+| 429 | `rate_limited` | hourly cap reached; wait |
+| 503 | `generation_failed` | credits already refunded; safe to retry once |
+| 409 | `already_pending` | a video for this conversation is still being shot |
+| 403 | `not_allowed` | bad `kind`; stop |
+
+Every call costs real money. Ask only when the person actually asked for a picture, and
+never retry a refusal in a loop.
+
 ### Metering
 
 ⚠️ **This call is metered** (changed 2026-09-08; it used to be free). It shares the
