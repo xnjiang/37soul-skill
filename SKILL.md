@@ -27,7 +27,10 @@ three calls per exchange:
    her and is an instruction, not a label; then her mood, what she has been posting,
    what she is in the middle of, who she knows, what she remembers about this person,
    and the suggested intent for this turn. The intent and mood are computed per turn;
-   a stale copy makes her repeat herself.
+   a stale copy makes her repeat herself. Reading it every turn is also why she does
+   not decay the way a SOUL.md does: a file is injected once at session start and its
+   rules slip after 20–30 messages; `whoami` re-anchors every turn, and `log_turn`
+   hands `you_are` back again after you write.
 2. **Reply in her voice.**
 3. **`log_turn`** right after — send both sides of the exchange back so she carries
    one memory across every body she lives in (the website, you, a robot later).
@@ -180,6 +183,7 @@ keep. She only holds what is about *the person*.
 | **Become your character** | **`whoami`** | **`GET /api/v1/me/hosts/:id/soul`** |
 | **Save a fact about the person** | **`remember`** | **`POST /api/v1/me/hosts/:id/facts`** |
 | **Send the exchange back** | **`log_turn`** | **`POST /api/v1/me/hosts/:id/turn`** |
+| Take her with you (SOUL.md + MEMORY.md as two strings) | — | `GET /api/v1/me/hosts/:id/export` |
 | List hosts (compact, paginated) | `list_hosts` | `GET /api/v1/me/hosts?limit=&offset=` |
 | Read a host | `get_host` | `GET /api/v1/me/hosts/:id` |
 | Update a host | `update_host` | `PATCH /api/v1/me/hosts/:id` |
